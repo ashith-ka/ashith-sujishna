@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ashith & Sujishna | Wedding Invitation</title>
     <meta name="description" content="Join us in celebrating the wedding of Ashith and Sujishna on May 3rd, 2026.">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
     <!-- Floating Music Player Button -->
@@ -24,7 +28,9 @@
     </button>
     <audio id="bg-music" loop>
         <!-- Using a placeholder royalty-free romantic track -->
-        <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_2fc1362e49.mp3?filename=romantic-piano-122420.mp3" type="audio/mpeg">
+        <source
+            src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_2fc1362e49.mp3?filename=romantic-piano-122420.mp3"
+            type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -34,7 +40,7 @@
             <h3 class="subtitle">WE ARE GETTING MARRIED</h3>
             <h1 class="names">Ashith <span>&</span> Sujishna</h1>
             <p class="date">May 3rd, 2026</p>
-            
+
             <div class="countdown-container">
                 <div class="countdown-item">
                     <span id="days">00</span>
@@ -57,7 +63,7 @@
             <button id="add-to-calendar" class="primary-btn">
                 <i class="far fa-calendar-plus"></i> Add to Calendar
             </button>
-            
+
             <a href="#events" class="scroll-down">
                 <i class="fas fa-chevron-down"></i>
             </a>
@@ -70,17 +76,21 @@
         <div class="container fade-in">
             <h2 class="section-title">When & Where</h2>
             <div class="divider"></div>
-            
+
             <div class="events-grid">
                 <!-- Wedding Card -->
                 <div class="event-card">
                     <div class="event-icon"><i class="fas fa-rings-wedding"></i> <i class="fa-solid fa-ring"></i></div>
                     <h3>The Wedding</h3>
-                    <p class="event-time">10:00 AM - 1:00 PM</p>
-                    <p class="event-venue">Shaa International</p>
+                    <p class="event-time">9:30 AM - 12:30 PM</p>
+                    <p class="event-venue">SHA International Auditorium</p>
                     <p class="event-address">Chettuva, Kerala</p>
                     <div class="event-links">
-                        <a href="https://maps.google.com/?q=Shaa+International+Chettuva" target="_blank" class="outline-btn"><i class="fas fa-map-marker-alt"></i> View on Map</a>
+                        <a href="https://maps.google.com/?q=Shaa+International+Chettuva" target="_blank"
+                            class="outline-btn"><i class="fas fa-map-marker-alt"></i> Map</a>
+                        <button class="outline-btn qr-btn"
+                            data-url="https://maps.google.com/?q=Shaa+International+Chettuva"
+                            data-label="Wedding: Shaa International"><i class="fas fa-qrcode"></i> Scan QR</button>
                     </div>
                 </div>
 
@@ -88,11 +98,14 @@
                 <div class="event-card">
                     <div class="event-icon"><i class="fas fa-glass-cheers"></i></div>
                     <h3>The Reception</h3>
-                    <p class="event-time">5:00 PM Onwards</p>
-                    <p class="event-venue">Jubily Hall</p>
+                    <p class="event-time">4:00 PM Onwards</p>
+                    <p class="event-venue">Jubilee Convention Centre</p>
                     <p class="event-address">Katoor, Kerala</p>
                     <div class="event-links">
-                        <a href="https://maps.google.com/?q=Jubily+Hall+Katoor" target="_blank" class="outline-btn"><i class="fas fa-map-marker-alt"></i> View on Map</a>
+                        <a href="https://maps.google.com/?q=Jubily+Hall+Katoor" target="_blank" class="outline-btn"><i
+                                class="fas fa-map-marker-alt"></i> Map</a>
+                        <button class="outline-btn qr-btn" data-url="https://maps.google.com/?q=Jubily+Hall+Katoor"
+                            data-label="Reception: Jubily Hall"><i class="fas fa-qrcode"></i> Scan QR</button>
                     </div>
                 </div>
             </div>
@@ -105,15 +118,27 @@
             <h2 class="section-title">Our Memories</h2>
             <div class="divider"></div>
             <p class="gallery-sub">A glimpse into our journey together.</p>
-            
+
             <div class="gallery-grid">
                 <!-- Placeholder image URLs from Unsplash (wedding theme) -->
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600" alt="Wedding Photo 1" loading="lazy"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600" alt="Wedding Photo 2" loading="lazy"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=600" alt="Wedding Photo 3" loading="lazy"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=600" alt="Wedding Photo 4" loading="lazy"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600" alt="Wedding Photo 5" loading="lazy"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=600" alt="Wedding Photo 6" loading="lazy"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 1" loading="lazy"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 2" loading="lazy"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 3" loading="lazy"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 4" loading="lazy"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 5" loading="lazy"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 6" loading="lazy"></div>
             </div>
         </div>
     </section>
@@ -140,4 +165,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>

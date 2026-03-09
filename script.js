@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: "0px 0px -50px 0px"
     };
 
-    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+    const appearOnScroll = new IntersectionObserver(function (entries, observer) {
         entries.forEach(entry => {
             if (!entry.isIntersecting) {
                 return;
@@ -82,15 +82,63 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = encodeURIComponent("Ashith & Sujishna's Wedding");
         const details = encodeURIComponent("Join us to celebrate our wedding! \n\nWedding: 10:00 AM at Shaa International, Chettuva \nReception: 5:00 PM at Jubily Hall, Katoor");
         const location = encodeURIComponent("Shaa International, Chettuva, Kerala");
-        
+
         // Dates must be in format YYYYMMDDTHHmmssZ (UTC time) or just YYYYMMDD/YYYYMMDD for whole day
         // Using local timezone offset format roughly for May 3 2026:
         const startTime = "20260503T043000Z"; // Approx 10:00 AM IST in UTC (subtract 5.5 hours)
         const endTime = "20260503T163000Z";   // Approx 10:00 PM IST in UTC
 
         const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
-        
+
         window.open(googleCalUrl, '_blank');
+    });
+
+    // --- 5. QR Code Modal Logic ---
+    const qrModal = document.getElementById('qr-modal');
+    const closeBtn = document.querySelector('.close-btn');
+    const qrBtns = document.querySelectorAll('.qr-btn');
+    const qrContainer = document.getElementById('qr-container');
+    const qrLabel = document.getElementById('qr-label');
+
+    // Create a generic QR code instance (we'll clear it when generating a new one)
+    let qrcode = null;
+
+    qrBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = btn.getAttribute('data-url');
+            const label = btn.getAttribute('data-label');
+
+            // Set label
+            qrLabel.innerText = label;
+
+            // Clear previous QR Code if exists
+            qrContainer.innerHTML = '';
+
+            // Generate new QR Code
+            qrcode = new QRCode(qrContainer, {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark: "#2c3e50",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            // Show modal
+            qrModal.classList.add('show');
+        });
+    });
+
+    // Close Modals
+    closeBtn.addEventListener('click', () => {
+        qrModal.classList.remove('show');
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === qrModal) {
+            qrModal.classList.remove('show');
+        }
     });
 
 });
