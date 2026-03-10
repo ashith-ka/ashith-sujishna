@@ -578,51 +578,250 @@ footer {
     color: #888;
 }
 
-/* --- Responsive Design --- */
+/* ============================================================
+   MOBILE-FIRST RESPONSIVE DESIGN
+   Target: 99% mobile users — optimised for 360px–430px screens
+   ============================================================ */
+
+/* --- Fluid base typography (clamp: min, preferred, max) --- */
+.names {
+    font-size: clamp(2.4rem, 10vw, 5rem);
+}
+
+.names span {
+    font-size: clamp(1.6rem, 6vw, 3rem);
+}
+
+.date {
+    font-size: clamp(0.95rem, 3.5vw, 1.5rem);
+}
+
+.subtitle {
+    font-size: clamp(0.7rem, 2.5vw, 1rem);
+    letter-spacing: clamp(2px, 1vw, 4px);
+}
+
+.section-title {
+    font-size: clamp(1.7rem, 6vw, 2.5rem);
+}
+
+.footer-names {
+    font-size: clamp(2rem, 8vw, 3rem);
+}
+
+/* --- Global 44px minimum touch target for ALL interactive elements --- */
+button,
+a,
+.outline-btn,
+.primary-btn,
+.music-btn,
+.close-btn {
+    min-height: 44px;
+}
+
+/* --- Active/touch feedback (replaces hover-only states on mobile) --- */
+@media (hover: none) {
+    .event-card:hover {
+        transform: none;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .gallery-item:hover img {
+        transform: none;
+    }
+
+    .gallery-item:hover::after {
+        opacity: 0;
+    }
+
+    .primary-btn:hover {
+        transform: none;
+    }
+
+    /* Tap feedback instead */
+    .outline-btn:active,
+    .primary-btn:active {
+        opacity: 0.75;
+        transform: scale(0.97);
+    }
+
+    .event-card:active {
+        transform: scale(0.99);
+    }
+}
+
+/* ---- 768px and below ---- */
 @media (max-width: 768px) {
-    .names {
-        font-size: 3.5rem;
-    }
-
-    .names span {
-        font-size: 2rem;
-    }
-
-    .countdown-item {
-        min-width: 60px;
-        padding: 10px;
-    }
-
-    .countdown-item span:first-child {
-        font-size: 1.8rem;
-    }
-
-    .section-title {
-        font-size: 2rem;
-    }
-
     section {
         padding: 60px 0;
     }
 
-    .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-}
-
-@media (max-width: 480px) {
-    .names {
-        font-size: 2.8rem;
+    /* Hero */
+    .hero-content {
+        padding: 0 20px;
     }
 
     .countdown-container {
         gap: 10px;
     }
 
-    .hero-content {
-        padding: 0 15px;
+    .countdown-item {
+        min-width: 64px;
+        padding: 12px 8px;
+    }
+
+    .countdown-item span:first-child {
+        font-size: 1.8rem;
+    }
+
+    /* Primary button — full width, easy thumb tap */
+    .primary-btn {
+        width: 100%;
+        max-width: 320px;
+        padding: 16px 30px;
+        font-size: 0.95rem;
+    }
+
+    /* Event cards — full width stacked */
+    .events-grid {
+        gap: 24px;
+        margin-top: 36px;
+    }
+
+    .event-card {
+        max-width: 100%;
+        border-radius: 4px;
+    }
+
+    .event-details {
+        margin: 0 24px 24px;
+    }
+
+    /* Hide QR button on mobile — you can't scan your own screen */
+    .qr-btn {
+        display: none;
+    }
+
+    /* Directions button full-width for mobile */
+    .event-links {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 24px;
+    }
+
+    .event-card .outline-btn {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 20px;
+        font-size: 0.85rem;
+    }
+
+    /* Gallery — 2 column on tablet */
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    /* Music button — larger hit area */
+    .music-btn {
+        width: 54px;
+        height: 54px;
+        font-size: 1.3rem;
     }
 }
+
+/* ---- 480px and below (most Android / iPhone SE) ---- */
+@media (max-width: 480px) {
+
+    /* Tighter section vertical padding */
+    section {
+        padding: 48px 0;
+    }
+
+    .container {
+        padding: 0 16px;
+    }
+
+    /* Hero */
+    .hero-content {
+        padding: 0 16px;
+    }
+
+    .countdown-container {
+        gap: 8px;
+    }
+
+    .countdown-item {
+        min-width: 56px;
+        padding: 10px 6px;
+    }
+
+    .countdown-item span:first-child {
+        font-size: 1.6rem;
+    }
+
+    .countdown-item .label {
+        font-size: 0.65rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* Events */
+    .event-card-badge {
+        margin-top: 20px;
+    }
+
+    .event-icon {
+        font-size: 1.8rem;
+        margin: 18px 0 12px;
+    }
+
+    .event-card h3 {
+        font-size: 1.7rem;
+    }
+
+    .event-details {
+        margin: 0 16px 20px;
+    }
+
+    .event-detail-row {
+        font-size: 0.85rem;
+    }
+
+    /* Gallery — 2 tight columns on phone */
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .gallery-item {
+        border-radius: 6px;
+    }
+
+    /* Modal */
+    .modal-content {
+        padding: 28px 20px;
+    }
+}
+
+/* ---- Notch / safe-area support (iPhone X+, Android cutout phones) ---- */
+@supports (padding: max(0px)) {
+    .hero-content {
+        padding-top: max(20px, env(safe-area-inset-top));
+    }
+
+    .music-btn {
+        top: max(16px, env(safe-area-inset-top));
+        right: max(16px, env(safe-area-inset-right));
+    }
+
+    footer {
+        padding-bottom: max(40px, calc(env(safe-area-inset-bottom) + 24px));
+    }
+}
+
 
 /* --- Modal Styles --- */
 .modal {
