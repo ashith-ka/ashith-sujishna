@@ -804,6 +804,11 @@ a,
     .modal-content {
         padding: 28px 20px;
     }
+
+    /* Hide scroll cue — redundant on small screens */
+    .scroll-down {
+        display: none;
+    }
 }
 
 /* ---- Notch / safe-area support (iPhone X+, Android cutout phones) ---- */
