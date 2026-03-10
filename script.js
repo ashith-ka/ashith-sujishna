@@ -167,49 +167,66 @@ document.addEventListener('DOMContentLoaded', () => {
         window.open(googleCalUrl, '_blank');
     });
 
-    // --- 5. QR Code Modal Logic ---
-    const qrModal = document.getElementById('qr-modal');
-    const closeBtn = document.querySelector('.close-btn');
-    const qrBtns = document.querySelectorAll('.qr-btn');
-    const qrContainer = document.getElementById('qr-container');
-    const qrLabel = document.getElementById('qr-label');
+    // --- 5. Share Invitation Logic ---
+    const shareBtn = document.getElementById('share-website');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', async () => {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: "Ashith & Sujishna's Wedding",
+                        text: "Join us in celebrating the wedding of Ashith and Sujishna on May 3rd, 2026.",
+                        url: window.location.href
+                    });
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        console.log('Share failed:', err);
+                    }
+                }
+            } else {
+                // Fallback: Copy to clipboard
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    const originalText = shareBtn.innerHTML;
+                    shareBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => { shareBtn.innerHTML = originalText; }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                }
+            }
+        });
+    }
 
-    // Create a generic QR code instance (we'll clear it when generating a new one)
-    let qrcode = null;
+    // --- 6. Smart Maps Deep-Linking ---
+    const mapLinks = document.querySelectorAll('.smart-maps-link');
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-    qrBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    mapLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
             e.preventDefault();
-            const url = btn.getAttribute('data-url');
-            const label = btn.getAttribute('data-label');
+            const lat = link.getAttribute('data-lat');
+            const lng = link.getAttribute('data-lng');
+            const label = encodeURIComponent(link.getAttribute('data-label'));
 
-            // Set label
-            qrLabel.innerText = label;
+            let mapUrl = "";
+            if (isIOS) {
+                // Apple Maps protocol
+                mapUrl = `maps://maps.apple.com/?q=${label}&ll=${lat},${lng}`;
 
-            // Clear previous QR Code if exists
-            qrContainer.innerHTML = '';
-
-            // Generate new QR Code
-            qrcode = new QRCode(qrContainer, {
-                text: url,
-                width: 200,
-                height: 200,
-                colorDark: "#2c3e50",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-
-            // Show modal
-            qrModal.classList.add('show');
+                // Set a timeout to fallback to browser if maps doesn't open
+                const check = setTimeout(() => {
+                    window.location.href = `https://maps.apple.com/?q=${label}&ll=${lat},${lng}`;
+                }, 500);
+                window.location.href = mapUrl;
+            } else {
+                // Google Maps universal link
+                mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+                window.open(mapUrl, '_blank');
+            }
         });
     });
 
-    // Close Modals
-    closeBtn.addEventListener('click', () => {
-        qrModal.classList.remove('show');
-    });
-
-    // --- 6. Gallery "View More" Logic ---
+    // --- 7. Gallery "View More" Logic ---
     const viewMoreBtn = document.getElementById('view-more-gallery');
     const hiddenItems = document.querySelectorAll('.gallery-item.mobile-hidden');
 
@@ -220,6 +237,48 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             // Hide the button after showing all
             viewMoreBtn.classList.add('hidden');
+        });
+    }
+
+    // --- 8. QR Code Modal Logic (Desktop Fallback) ---
+    const qrModal = document.getElementById('qr-modal');
+    const closeBtn = document.querySelector('.close-btn');
+    const qrBtns = document.querySelectorAll('.qr-btn');
+    const qrContainer = document.getElementById('qr-container');
+    const qrLabel = document.getElementById('qr-label');
+
+    qrBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = btn.getAttribute('data-url');
+            const label = btn.getAttribute('data-label');
+
+            qrLabel.innerText = label;
+            qrContainer.innerHTML = '';
+
+            // Generate QR Code
+            new QRCode(qrContainer, {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark: "#2c3e50",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            qrModal.classList.add('show');
+        });
+    });
+
+    if (closeBtn && qrModal) {
+        closeBtn.addEventListener('click', () => {
+            qrModal.classList.remove('show');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === qrModal) {
+                qrModal.classList.remove('show');
+            }
         });
     }
 
