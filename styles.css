@@ -591,6 +591,33 @@ section {
     opacity: 1;
 }
 
+.gallery-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+#view-more-gallery.hidden {
+    display: none;
+}
+
+.gallery-item.show-mobile {
+    display: block !important;
+    animation: fadeInGallery 0.5s ease forwards;
+}
+
+@keyframes fadeInGallery {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* --- Footer --- */
 footer {
     background-color: #1a1a1a;
@@ -764,6 +791,11 @@ a,
         width: 54px;
         height: 54px;
         font-size: 1.3rem;
+    }
+
+    /* Hide extra gallery items on mobile by default */
+    .gallery-item.mobile-hidden {
+        display: none;
     }
 }
 

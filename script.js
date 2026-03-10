@@ -209,10 +209,18 @@ document.addEventListener('DOMContentLoaded', () => {
         qrModal.classList.remove('show');
     });
 
-    window.addEventListener('click', (e) => {
-        if (e.target === qrModal) {
-            qrModal.classList.remove('show');
-        }
-    });
+    // --- 6. Gallery "View More" Logic ---
+    const viewMoreBtn = document.getElementById('view-more-gallery');
+    const hiddenItems = document.querySelectorAll('.gallery-item.mobile-hidden');
+
+    if (viewMoreBtn) {
+        viewMoreBtn.addEventListener('click', () => {
+            hiddenItems.forEach(item => {
+                item.classList.add('show-mobile');
+            });
+            // Hide the button after showing all
+            viewMoreBtn.classList.add('hidden');
+        });
+    }
 
 });
