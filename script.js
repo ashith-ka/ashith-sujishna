@@ -1,5 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- 0. Network Detection: Disable video on slow connections ---
+    const heroVideo = document.getElementById('hero-video');
+    const videoContainer = document.querySelector('.video-container');
+
+    function isSlowConnection() {
+        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (!conn) return false; // Unknown — give benefit of the doubt
+        // Save-Data mode (user explicitly opted in to saving data)
+        if (conn.saveData) return true;
+        // 2G or 3G effective connection type
+        return ['slow-2g', '2g', '3g'].includes(conn.effectiveType);
+    }
+
+    if (isSlowConnection()) {
+        // Remove the video to avoid downloading a large file
+        if (heroVideo) heroVideo.remove();
+
+        // Apply a romantic gradient fallback to the video container
+        if (videoContainer) {
+            videoContainer.style.background = 'linear-gradient(135deg, #1a0a0f 0%, #4a1530 35%, #7b2d4a 65%, #2c0d1f 100%)';
+            videoContainer.style.position = 'absolute';
+            videoContainer.style.inset = '0';
+        }
+
+        // Show a small non-intrusive data-saver notice
+        const notice = document.createElement('div');
+        notice.style.cssText = [
+            'position:fixed', 'bottom:70px', 'left:50%', 'transform:translateX(-50%)',
+            'background:rgba(0,0,0,0.65)', 'color:#e8c7d0', 'font-size:11px',
+            'padding:6px 14px', 'border-radius:20px', 'z-index:9999',
+            'font-family:sans-serif', 'pointer-events:none', 'white-space:nowrap',
+            'backdrop-filter:blur(4px)'
+        ].join(';');
+        notice.textContent = '📶 Video paused to save data on your connection';
+        document.body.appendChild(notice);
+        setTimeout(() => notice.remove(), 5000); // Auto-dismiss after 5s
+    }
+
     // --- 1. Music Player Logic ---
     const musicToggle = document.getElementById('music-toggle');
     const bgMusic = document.getElementById('bg-music');
@@ -75,7 +113,43 @@ document.addEventListener('DOMContentLoaded', () => {
         appearOnScroll.observe(el);
     });
 
-    // --- 4. Add to Calendar Logic ---
+    // --- 4. Hero Video Scroll Animation ---
+    // heroVideo already declared above in section 0
+    const heroSection = document.querySelector('.hero');
+
+    // We only want to animate while the hero section is in view
+    window.addEventListener('scroll', () => {
+        if (!heroVideo) return;
+
+        let scrollY = window.scrollY;
+
+        // Use a fixed value or the actual height. Offset height sometimes loads 0 depending on timing, so fallback to window.innerHeight if needed.
+        let heroHeight = heroSection.offsetHeight || window.innerHeight;
+
+        // Stop calculating if scrolled past hero
+        if (scrollY > heroHeight) return;
+
+        // Calculate a scroll progress percentage (0 to 1)
+        let progress = scrollY / heroHeight;
+
+        // Visual Effects Mapping:
+        // Scale: Starts at 1.05, shrinks down to 1.0
+        let scaleVal = 1.05 - (0.05 * progress);
+
+        // Blur: Starts at 0px, increases to 8px
+        let blurVal = progress * 8;
+
+        // Opacity: Starts at 1, fades to 0.4
+        let opacityVal = 1 - (0.6 * progress);
+
+        // Apply styles dynamically
+        // Use translateZ(0) to force hardware acceleration for smoother rendering
+        heroVideo.style.transform = `scale(${scaleVal}) translateZ(0)`;
+        heroVideo.style.filter = `blur(${blurVal}px)`;
+        heroVideo.style.opacity = opacityVal;
+    });
+
+    // --- 5. Add to Calendar Logic ---
     const addToCalendarBtn = document.getElementById('add-to-calendar');
     addToCalendarBtn.addEventListener('click', () => {
         // Google Calendar Format

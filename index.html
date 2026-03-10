@@ -26,16 +26,24 @@
     <button id="music-toggle" class="music-btn" aria-label="Play/Pause Background Music">
         <i class="fas fa-music"></i>
     </button>
-    <audio id="bg-music" loop>
-        <!-- Using a placeholder royalty-free romantic track -->
-        <source
-            src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_2fc1362e49.mp3?filename=romantic-piano-122420.mp3"
-            type="audio/mpeg">
+    <audio id="bg-music" loop preload="none">
+        <!-- Royalty-free romantic piano track (direct CDN links) -->
+        <source src="https://cdn.pixabay.com/audio/2022/10/25/audio_2fc1362e49.mp3" type="audio/mpeg">
+        <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+
+        <!-- Video Background Container -->
+        <div class="video-container">
+            <video id="hero-video" autoplay loop muted playsinline>
+                <!-- Romantic wedding video placeholder -->
+                <source src="assets/hero-video.mp4" type="video/mp4">
+            </video>
+        </div>
+
         <div class="hero-content fade-in">
             <h3 class="subtitle">WE ARE GETTING MARRIED</h3>
             <h1 class="names">Ashith <span>&</span> Sujishna</h1>
