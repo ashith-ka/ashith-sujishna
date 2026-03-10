@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 2. Countdown Timer Logic ---
-    // Set the date we're counting down to: May 3, 2026, 10:00:00 AM (IST roughly, or just local time)
-    const countDownDate = new Date("May 3, 2026 10:00:00").getTime();
+    // Set the date we're counting down to: May 3rd, 2026, 10:00 AM IST (India Standard Time)
+    const countDownDate = new Date("2026-05-03T10:00:00+05:30").getTime();
 
     // Update the count down every 1 second
     const countdownFunction = setInterval(() => {
