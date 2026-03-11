@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1210">
+    <title>Guest Memories | Ashith & Sujishna</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="memories.css">
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Face API JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+
+<body class="memories-page">
+    <header class="memories-header">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+        <h1>Guest Memories</h1>
+        <div class="header-actions">
+            <button id="find-me-btn" class="icon-btn" title="Find My Photos">
+                <i class="fas fa-face-smile"></i>
+            </button>
+            <button id="upload-btn" class="primary-btn">
+                <i class="fas fa-camera"></i> Upload
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Search/Filter Status -->
+        <div id="filter-status" class="filter-status hidden">
+            <span>Showing photos of you</span>
+            <button id="clear-filter" class="text-btn">Clear</button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div id="memories-grid" class="gallery-grid">
+            <!-- Photos will be injected here -->
+            <div class="gallery-loader">
+                <div class="spinner"></div>
+                <p>Loading memories...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Share a Memory</h3>
+            <p>Help us capture the magic of today.</p>
+
+            <div id="drop-zone" class="drop-zone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Tap to select or drag & drop</p>
+                <input type="file" id="file-input" accept="image/*" hidden>
+            </div>
+
+            <div id="preview-container" class="preview-container hidden">
+                <img id="upload-preview" src="" alt="Preview">
+                <div class="upload-controls">
+                    <button id="cancel-upload" class="outline-btn">Cancel</button>
+                    <button id="confirm-upload" class="primary-btn">Upload Photo</button>
+                </div>
+            </div>
+
+            <div id="upload-progress" class="upload-progress hidden">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p>Optimizing and uploading...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Face Search Modal -->
+    <div id="face-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="face-search-header">
+                <i class="fas fa-face-recognition"></i>
+                <h3>Find Your Photos</h3>
+                <p>Take a selfie or upload a photo of yourself, and we'll find all the memories you're in!</p>
+            </div>
+
+            <div id="face-drop-zone" class="drop-zone">
+                <i class="fas fa-user-circle"></i>
+                <p>Capture or Select Photo</p>
+                <input type="file" id="face-input" accept="image/*" capture="user" hidden>
+            </div>
+
+            <div id="face-processing" class="face-processing hidden">
+                <div class="pulse-ring"></div>
+                <p>Scanning gallery for your face...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Full Screen Memory">
+            <div class="lightbox-nav">
+                <button class="lightbox-prev" aria-label="Previous photo"><i class="fas fa-chevron-left"></i></button>
+                <button class="lightbox-next" aria-label="Next photo"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="memories.js"></script>
+</body>
+
+</html>
