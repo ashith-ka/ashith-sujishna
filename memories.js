@@ -309,21 +309,47 @@ document.addEventListener('DOMContentLoaded', () => {
         const { data: photos, error } = await supabaseClient.from('photos').select('*');
         if (error) throw error;
 
-        // In a real production app, embeddings should be stored in DB (pgvector).
-        // For this client-side demo, we process existing images.
-        // NOTE: This is slow for >100 photos, so usually embeddings are stored.
-
         const matchedPhotos = [];
+        const SIMILARITY_THRESHOLD = 0.6; // Distance threshold (lower = more similar, face-api uses euclidean distance)
 
         // Scan gallery for matches
         for (const photo of photos) {
-            // Placeholder: for client-side search we'd normally compare descriptors
-            // In this demo, we just show all photos as if matched
-            matchedPhotos.push(photo);
+            try {
+                // Load and detect faces in the gallery photo
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+
+                await new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = reject;
+                    img.src = photo.url;
+                });
+
+                const detection = await faceapi
+                    .detectSingleFace(img)
+                    .withFaceLandmarks()
+                    .withFaceDescriptor();
+
+                if (detection) {
+                    // Calculate distance between target and detected face
+                    const distance = faceapi.euclideanDistance(targetDescriptor, detection.descriptor);
+
+                    // If distance is below threshold, it's a match
+                    if (distance < SIMILARITY_THRESHOLD) {
+                        matchedPhotos.push(photo);
+                    }
+                }
+            } catch (err) {
+                console.warn('Could not process photo:', photo.id, err);
+                // Continue with next photo if this one fails
+            }
         }
 
         renderGallery(matchedPhotos);
         if (filterStatus) filterStatus.classList.remove('hidden');
+        if (matchedPhotos.length === 0) {
+            alert('No photos found with your face. Try a clearer selfie!');
+        }
         if (faceModal) faceModal.style.display = 'none';
         resetFaceSearch();
     }
@@ -347,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxClose = document.querySelector('.lightbox-close');
     const lightboxPrev = document.querySelector('.lightbox-prev');
     const lightboxNext = document.querySelector('.lightbox-next');
+    const lightboxDownload = document.getElementById('lightbox-download');
     let currentGalleryPhotos = [];
     let currentIndex = 0;
 
@@ -389,6 +416,38 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('lightbox-open');
     }
 
+    async function downloadCurrentPhoto() {
+        if (currentIndex === -1 || currentGalleryPhotos.length === 0) return;
+
+        const imageUrl = currentGalleryPhotos[currentIndex];
+        const fileName = `memory-${Date.now()}.jpg`;
+
+        try {
+            // Fetch the image as a blob to support external URLs better
+            const response = await fetch(imageUrl);
+            if (!response.ok) throw new Error('Failed to fetch image');
+            const blob = await response.blob();
+
+            // Create object URL and trigger download
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
+            }, 100);
+        } catch (error) {
+            console.error('Download failed:', error);
+            alert('Failed to download photo. Please try again.');
+        }
+    }
+
     function showNext() {
         if (currentGalleryPhotos.length === 0) return;
         currentIndex = (currentIndex + 1) % currentGalleryPhotos.length;
@@ -404,6 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lightboxClose) lightboxClose.onclick = closeLightbox;
     if (lightboxPrev) lightboxPrev.onclick = (e) => { e.stopPropagation(); showPrev(); };
     if (lightboxNext) lightboxNext.onclick = (e) => { e.stopPropagation(); showNext(); };
+    if (lightboxDownload) lightboxDownload.onclick = (e) => { e.stopPropagation(); downloadCurrentPhoto(); };
     if (lightbox) lightbox.onclick = (e) => { if (e.target === lightbox) closeLightbox(); };
 
     document.addEventListener('keydown', (e) => {
