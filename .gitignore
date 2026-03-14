@@ -1,5 +1,4 @@
-# Supabase Config (local development)
-config.js
+
 
 # GitHub Actions generated secrets
 _supabase-secrets.js
