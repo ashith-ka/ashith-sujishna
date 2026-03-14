@@ -1,5 +1,8 @@
-# Supabase Config (contains secrets)
+# Supabase Config (local development)
 config.js
+
+# GitHub Actions generated secrets
+_supabase-secrets.js
 
 # OS files
 .DS_Store
@@ -16,3 +19,4 @@ node_modules/
 # Local env files
 .env
 .env.local
+AGENTS.md
