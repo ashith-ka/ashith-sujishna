@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
     const previewContainer = document.getElementById('preview-container');
+    const previewGrid = document.getElementById('preview-grid');
     const uploadPreview = document.getElementById('upload-preview');
     const cancelUpload = document.getElementById('cancel-upload');
     const confirmUpload = document.getElementById('confirm-upload');
@@ -113,23 +114,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (fileInput) {
         fileInput.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) handleFileSelect(file);
+            const files = Array.from(e.target.files);
+            if (files.length) handleFileSelect(files);
         };
     }
 
-    function handleFileSelect(file) {
-        if (!file.type.startsWith('image/')) {
-            alert('Please select an image file.');
+    function handleFileSelect(files) {
+        const validFiles = files.filter(file => file.type.startsWith('image/'));
+        if (validFiles.length === 0) {
+            alert('Please select image files.');
             return;
         }
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            if (uploadPreview) uploadPreview.src = e.target.result;
-            if (dropZone) dropZone.classList.add('hidden');
-            if (previewContainer) previewContainer.classList.remove('hidden');
-        };
-        reader.readAsDataURL(file);
+
+        previewGrid.innerHTML = '';
+        validFiles.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewGrid.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        if (dropZone) dropZone.classList.add('hidden');
+        if (previewContainer) previewContainer.classList.remove('hidden');
     }
 
     function resetUpload() {
@@ -138,56 +147,58 @@ document.addEventListener('DOMContentLoaded', () => {
         if (previewContainer) previewContainer.classList.add('hidden');
         if (uploadProgress) uploadProgress.classList.add('hidden');
         if (progressFill) progressFill.style.width = '0%';
+        if (previewGrid) previewGrid.innerHTML = '';
     }
 
     if (cancelUpload) cancelUpload.onclick = resetUpload;
 
     if (confirmUpload) {
         confirmUpload.onclick = async () => {
-            const file = fileInput.files[0];
-            if (!file) return;
+            const files = Array.from(fileInput.files);
+            if (!files.length) return;
 
             confirmUpload.disabled = true;
             uploadProgress.classList.remove('hidden');
 
+            let uploadedCount = 0;
+            const totalFiles = files.length;
+
             try {
-                // 1. Compress Image (2K)
-                progressFill.style.width = '30%';
-                const optimizedBlob = await compressImage(file);
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const progress = ((i + 1) / totalFiles) * 100;
+                    progressFill.style.width = `${progress}%`;
 
-                // 2. Upload to Supabase Storage
-                progressFill.style.width = '60%';
-                const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
-                const { data: storageData, error: storageError } = await supabaseClient.storage
-                    .from('memories')
-                    .upload(fileName, optimizedBlob);
+                    const optimizedBlob = await compressImage(file);
+                    const fileName = `${Date.now()}-${i}-${Math.random().toString(36).substring(7)}.jpg`;
+                    const { data: storageData, error: storageError } = await supabaseClient.storage
+                        .from('memories')
+                        .upload(fileName, optimizedBlob);
 
-                if (storageError) throw storageError;
+                    if (storageError) throw storageError;
 
-                // 3. Get Public URL
-                const { data: { publicUrl } } = supabaseClient.storage
-                    .from('memories')
-                    .getPublicUrl(fileName);
+                    const { data: { publicUrl } } = supabaseClient.storage
+                        .from('memories')
+                        .getPublicUrl(fileName);
 
-                // 4. Save Metadata to DB
-                progressFill.style.width = '90%';
-                const { error: dbError } = await supabaseClient
-                    .from('photos')
-                    .insert([{ url: publicUrl, storage_path: fileName }]);
+                    const { error: dbError } = await supabaseClient
+                        .from('photos')
+                        .insert([{ url: publicUrl, storage_path: fileName }]);
 
-                if (dbError) throw dbError;
+                    if (dbError) throw dbError;
+                    uploadedCount++;
+                }
 
-                progressFill.style.width = '100%';
                 setTimeout(() => {
                     uploadModal.style.display = 'none';
                     resetUpload();
                     confirmUpload.disabled = false;
-                    fetchMemories(); // Refresh gallery
+                    fetchMemories();
                 }, 500);
 
             } catch (err) {
                 console.error('Upload failed:', err);
-                alert('Upload failed: ' + err.message);
+                alert(`Uploaded ${uploadedCount} of ${totalFiles} photos. Error: ${err.message}`);
                 confirmUpload.disabled = false;
             }
         };
@@ -263,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FACE SEARCH LOGIC ---
     if (findMeBtn) {
-        findMeBtn.onclick = () => {
+        findMeBtn.onclick = async () => {
             if (!modelsLoaded) {
                 alert('Models still loading, please wait a moment...');
                 return;
@@ -294,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Search in gallery
                 await performFaceSearch(detection.descriptor);
 
             } catch (err) {
