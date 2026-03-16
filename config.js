@@ -6,11 +6,11 @@
  * 
  */
 const CONFIG = {
-    SUPABASE_URL: 'https://osxxdxbrgyzpgbuumfpb.supabase.co',
-    SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9zeHhkeGJyZ3l6cGdidXVtZnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjg5MDYsImV4cCI6MjA4ODgwNDkwNn0.ZgeckzbMQD9MNvFaUkasx9gxgfa54CtgAtQbsmBnDNQ'
+    SUPABASE_URL: '',
+    SUPABASE_ANON_KEY: ''
 };
 
-(function () {
+(function() {
     if (typeof window !== 'undefined') {
         if (window.SUPABASE_URL && window.SUPABASE_URL.startsWith('http')) {
             CONFIG.SUPABASE_URL = window.SUPABASE_URL;
