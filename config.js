@@ -6,11 +6,11 @@
  * 
  */
 const CONFIG = {
-    SUPABASE_URL: 'SUPABASE_URL_REMOVED',
-    SUPABASE_ANON_KEY: 'SUPABASE_ANON_KEY_REMOVED'
+    SUPABASE_URL: '',
+    SUPABASE_ANON_KEY: ''
 };
 
-(function () {
+(function() {
     if (typeof window !== 'undefined') {
         if (window.SUPABASE_URL && window.SUPABASE_URL.startsWith('http')) {
             CONFIG.SUPABASE_URL = window.SUPABASE_URL;
