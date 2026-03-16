@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (heroVideo) {
                     heroVideo.play().catch(e => console.log("Video autoplay failed:", e));
                 }
-            }, 800);
+            }, 1500);
         });
     } else {
         // No cover - show content immediately
