@@ -127,7 +127,7 @@ section {
 /* --- Floating Music Button --- */
 .music-btn {
     position: fixed;
-    top: 20px;
+    top: 80px;
     right: 20px;
     width: 50px;
     height: 50px;
@@ -153,6 +153,32 @@ section {
 
 .music-btn.playing {
     animation: pulse 2s infinite;
+}
+
+.lang-toggle {
+    position: fixed;
+    top: 20px;
+    right: 80px;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.lang-toggle:hover {
+    background: var(--primary-color);
+    transform: scale(1.05);
+    color: #fff;
 }
 
 @keyframes pulse {
@@ -184,6 +210,43 @@ section {
     color: var(--text-light);
     overflow: hidden;
     /* Prevent video scale-up from causing scrollbars */
+}
+
+/* Kerala Style Hero for Malayalam Page */
+body.malayalam .hero {
+    background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 25%, #4a2c20 50%, #2d1810 75%, #1a0f0a 100%);
+}
+
+body.malayalam .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(255, 200, 100, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 200, 100, 0.03) 0%, transparent 50%),
+        repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255, 220, 180, 0.02) 20px, rgba(255, 220, 180, 0.02) 21px),
+        repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255, 220, 180, 0.02) 20px, rgba(255, 220, 180, 0.02) 21px);
+    z-index: 0;
+}
+
+body.malayalam .hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10,90 Q30,70 50,50 Q70,30 90,10 Q80,30 60,50 Q40,70 20,90 Z' fill='%23c9a86c' opacity='0.08'/%3E%3C/svg%3E") no-repeat top left,
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10,90 Q30,70 50,50 Q70,30 90,10 Q80,30 60,50 Q40,70 20,90 Z' fill='%23c9a86c' opacity='0.08' transform='scale(-1,1) translate(-100,0)'/%3E%3C/svg%3E") no-repeat top right,
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10,90 Q30,70 50,50 Q70,30 90,10 Q80,30 60,50 Q40,70 20,90 Z' fill='%23c9a86c' opacity='0.08' transform='scale(1,-1) translate(0,-100)'/%3E%3C/svg%3E") no-repeat bottom left,
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10,90 Q30,70 50,50 Q70,30 90,10 Q80,30 60,50 Q40,70 20,90 Z' fill='%23c9a86c' opacity='0.08' transform='scale(-1,-1) translate(-100,-100)'/%3E%3C/svg%3E") no-repeat bottom right;
+    background-size: 150px 150px;
+    z-index: 0;
+    pointer-events: none;
 }
 
 /* Video Background Handling */
@@ -366,6 +429,141 @@ section {
     60% {
         transform: translateY(-10px) translateX(-50%);
     }
+}
+
+/* --- Invitation Note Section --- */
+.invitation-note {
+    background: linear-gradient(180deg, #d4c4a8 0%, #c9b896 50%, #bea87a 100%);
+    padding: 80px 20px;
+    text-align: center;
+    position: relative;
+}
+
+/* Paper texture overlay */
+.invitation-note::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(139, 119, 82, 0.03) 1px, rgba(139, 119, 82, 0.03) 2px),
+        repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(139, 119, 82, 0.03) 1px, rgba(139, 119, 82, 0.03) 2px);
+    pointer-events: none;
+}
+
+/* Decorative border */
+.invitation-note::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border: 2px solid rgba(139, 90, 43, 0.3);
+    pointer-events: none;
+}
+
+.invitation-note .container {
+    max-width: 750px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Decorative corner ornaments */
+.invitation-note .container::before,
+.invitation-note .container::after {
+    content: '✦';
+    position: absolute;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    opacity: 0.6;
+}
+
+.invitation-note .container::before {
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.invitation-note .container::after {
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.invitation-text {
+    font-family: 'Manjari', var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 400;
+    line-height: 2;
+    color: #2c1810;
+    margin-bottom: 25px;
+    text-align: justify;
+    text-indent: 2em;
+}
+
+.invitation-text:first-of-type {
+    text-indent: 0;
+}
+
+.invitation-text:first-of-type::first-letter {
+    font-size: 3rem;
+    float: left;
+    line-height: 1;
+    padding-right: 10px;
+    color: var(--primary-color);
+    font-family: 'Manjari', var(--font-heading);
+}
+
+.invitation-signature {
+    margin-top: 50px;
+    text-align: right;
+}
+
+.signature-names {
+    font-family: 'Manjari', var(--font-heading);
+    font-size: 1.6rem;
+    color: #2c1810;
+    margin-bottom: 8px;
+}
+
+.signature-address {
+    font-family: 'Manjari', var(--font-body);
+    font-size: 0.95rem;
+    color: #5a4a3a;
+}
+
+.invitation-text:first-of-type {
+    text-indent: 0;
+}
+
+.invitation-text:first-of-type::first-letter {
+    font-size: 3rem;
+    float: left;
+    line-height: 1;
+    padding-right: 10px;
+    color: var(--primary-color);
+    font-family: var(--font-heading);
+}
+
+.invitation-signature {
+    margin-top: 50px;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.signature-names {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    color: #2c1810;
+    margin-bottom: 8px;
+}
+
+.signature-address {
+    font-size: 0.95rem;
+    color: #5a4a3a;
 }
 
 /* --- Events Section --- */
@@ -839,6 +1037,15 @@ a,
         width: 54px;
         height: 54px;
         font-size: 1.3rem;
+        top: 80px;
+    }
+
+    /* Language toggle — adjust for mobile */
+    .lang-toggle {
+        top: 15px;
+        right: 80px;
+        padding: 8px 12px;
+        font-size: 12px;
     }
 
     /* Hide extra gallery items on mobile by default */
@@ -857,6 +1064,51 @@ a,
 
     .container {
         padding: 0 16px;
+    }
+
+    /* Invitation Note */
+    .invitation-note {
+        padding: 50px 15px;
+    }
+
+    .invitation-note::after {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        border-width: 1px;
+    }
+
+    .invitation-note .container::before,
+    .invitation-note .container::after {
+        font-size: 1.2rem;
+    }
+
+    .invitation-note .container::before {
+        top: -25px;
+    }
+
+    .invitation-note .container::after {
+        bottom: -25px;
+    }
+
+    .invitation-text {
+        font-size: 1.1rem;
+        text-align: justify;
+        line-height: 1.9;
+        margin-bottom: 20px;
+    }
+
+    .invitation-text:first-of-type::first-letter {
+        font-size: 2.5rem;
+    }
+
+    .signature-names {
+        font-size: 1.3rem;
+    }
+
+    .signature-address {
+        font-size: 0.85rem;
     }
 
     /* Hero */
