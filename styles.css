@@ -18,6 +18,168 @@
     box-sizing: border-box;
 }
 
+/* --- Cover / Opening Animation --- */
+.cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 25%, #4a2c20 50%, #2d1810 75%, #1a0f0a 100%);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.cover.hidden {
+    opacity: 0;
+    transform: scale(1.5);
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.cover-content {
+    text-align: center;
+    transform: rotate(-15deg);
+    transition: transform 0.5s ease;
+}
+
+.cover:hover .cover-content {
+    transform: rotate(-12deg) scale(1.02);
+}
+
+.cover-envelope {
+    width: 420px;
+    height: 280px;
+    position: relative;
+    perspective: 1500px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-15deg); }
+    50% { transform: translateY(-15px) rotate(-12deg); }
+}
+
+.envelope-body {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #f5e6d3 0%, #e8d5c4 100%);
+    border-radius: 0 0 20px 20px;
+    position: absolute;
+    bottom: 0;
+    box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.4),
+        inset 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(180deg, #f5e6d3 0%, #dcc9b0 100%);
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    transform-origin: top;
+    transition: transform 0.8s ease;
+    z-index: 2;
+}
+
+.cover-envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.envelope-text {
+    text-align: center;
+    color: #2c1810;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.cover-invite-text {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+}
+
+.cover-names {
+    font-family: 'Manjari', var(--font-heading);
+    font-size: 2rem;
+    color: #2c1810;
+    margin-bottom: 12px;
+}
+
+.cover-names span {
+    color: var(--primary-color);
+}
+
+.cover-date {
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+    color: #5a4a3a;
+    margin-bottom: 20px;
+}
+
+.cover-tap {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    animation: pulse-opacity 2s ease-in-out infinite;
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+@keyframes pulse-opacity {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* English version cover text */
+body:not(.malayalam) .cover-names {
+    font-family: var(--font-heading);
+}
+
+/* Hide main content initially on Malayalam page */
+body.malayalam .hero,
+body.malayalam .invitation-note,
+body.malayalam .events,
+body.malayalam .gallery,
+body.malayalam footer {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+body.malayalam.cover-opened .hero,
+body.malayalam.cover-opened .invitation-note,
+body.malayalam.cover-opened .events,
+body.malayalam.cover-opened .gallery,
+body.malayalam.cover-opened footer {
+    opacity: 1;
+}
+
+/* English version cover opened states */
+body.cover-opened:not(.malayalam) .hero,
+body.cover-opened:not(.malayalam) .events,
+body.cover-opened:not(.malayalam) .gallery,
+body.cover-opened:not(.malayalam) footer {
+    opacity: 1;
+}
+
+/* Show fade-in content when cover is opened */
+body.cover-opened .fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -28,6 +190,28 @@ body {
     color: var(--text-dark);
     line-height: 1.6;
     overflow-x: hidden;
+}
+
+/* Hide main content initially when cover is shown (English version) */
+body:not(.malayalam) .hero,
+body:not(.malayalam) .events,
+body:not(.malayalam) .gallery,
+body:not(.malayalam) footer {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* Fallback for no JS - show content */
+noscript + body .hero,
+noscript + body .events,
+noscript + body .gallery,
+noscript + body footer,
+noscript + body .malayalam .hero,
+noscript + body .malayalam .invitation-note,
+noscript + body .malayalam .events,
+noscript + body .malayalam .gallery,
+noscript + body .malayalam footer {
+    opacity: 1 !important;
 }
 
 body.lightbox-open {
@@ -1430,5 +1614,48 @@ a,
         width: 45px;
         height: 45px;
         font-size: 1rem;
+    }
+}
+
+/* Mobile responsive for cover/envelope */
+@media (max-width: 768px) {
+    .cover-envelope {
+        width: 320px;
+        height: 210px;
+    }
+
+    .envelope-flap {
+        height: 105px;
+    }
+
+    .envelope-text {
+        padding: 20px;
+    }
+
+    .cover-invite-text {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+    }
+
+    .cover-names {
+        font-size: 1.5rem;
+    }
+
+    .cover-date {
+        font-size: 1rem;
+    }
+
+    .cover-tap {
+        font-size: 0.9rem;
+        bottom: 20px;
+    }
+
+    .cover-content {
+        transform: rotate(-10deg);
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(-10deg); }
+        50% { transform: translateY(-10px) rotate(-8deg); }
     }
 }

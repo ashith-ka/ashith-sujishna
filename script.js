@@ -1,6 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 0. Network Detection: Disable video on slow connections ---
+    // --- 0. Cover / Opening Animation ---
+    const cover = document.getElementById('cover');
+    
+    if (cover) {
+        cover.addEventListener('click', () => {
+            const envelope = document.querySelector('.cover-envelope');
+            envelope.classList.add('open');
+            
+            setTimeout(() => {
+                cover.classList.add('hidden');
+                document.body.classList.add('cover-opened');
+                
+                // Try to autoplay video after user interaction
+                const heroVideo = document.getElementById('hero-video');
+                if (heroVideo) {
+                    heroVideo.play().catch(e => console.log("Video autoplay failed:", e));
+                }
+            }, 800);
+        });
+    } else {
+        // No cover - show content immediately
+        document.body.classList.add('cover-opened');
+    }
+
+    // --- 1. Network Detection: Disable video on slow connections ---
     const heroVideo = document.getElementById('hero-video');
     const videoContainer = document.querySelector('.video-container');
 
