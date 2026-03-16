@@ -6,7 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cover) {
         cover.addEventListener('click', () => {
             const envelope = document.querySelector('.cover-envelope');
+            const goldenRays = document.querySelector('.golden-rays');
+            
             envelope.classList.add('open');
+            
+            setTimeout(() => {
+                if (goldenRays) {
+                    goldenRays.style.animation = 'none';
+                    goldenRays.offsetHeight;
+                    goldenRays.style.animation = 'goldenGlow 1.5s ease-out forwards';
+                }
+            }, 300);
             
             setTimeout(() => {
                 cover.classList.add('hidden');
