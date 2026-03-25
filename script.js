@@ -2,32 +2,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 0. Cover / Opening Animation ---
     const cover = document.getElementById('cover');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
     if (cover) {
+        let isCoverOpening = false;
+
         cover.addEventListener('click', () => {
-            const envelope = document.querySelector('.cover-envelope');
-            const goldenRays = document.querySelector('.golden-rays');
-            
-            envelope.classList.add('open');
-            
-            setTimeout(() => {
-                if (goldenRays) {
-                    goldenRays.style.animation = 'none';
-                    goldenRays.offsetHeight;
-                    goldenRays.style.animation = 'goldenGlow 1.5s ease-out forwards';
-                }
-            }, 300);
-            
-            setTimeout(() => {
-                cover.classList.add('hidden');
+            if (isCoverOpening) return;
+
+            isCoverOpening = true;
+            const pressDuration = prefersReducedMotion ? 0 : 110;
+            const openingDelay = pressDuration;
+            const openedDelay = prefersReducedMotion ? 180 : 980;
+            const zoomDelay = prefersReducedMotion ? 240 : 1260;
+            const revealDelay = prefersReducedMotion ? 260 : 1390;
+            const exitDelay = prefersReducedMotion ? 360 : 2130;
+
+            cover.classList.add('is-pressed');
+
+            window.setTimeout(() => {
+                cover.classList.remove('is-pressed');
+                cover.classList.add('is-opening');
+            }, openingDelay);
+
+            window.setTimeout(() => {
+                cover.classList.add('is-opened');
+            }, openedDelay);
+
+            window.setTimeout(() => {
+                cover.classList.add('is-zooming');
+            }, zoomDelay);
+
+            window.setTimeout(() => {
                 document.body.classList.add('cover-opened');
-                
+
                 // Try to autoplay video after user interaction
                 const heroVideo = document.getElementById('hero-video');
                 if (heroVideo) {
                     heroVideo.play().catch(e => console.log("Video autoplay failed:", e));
                 }
-            }, 1500);
+            }, revealDelay);
+
+            window.setTimeout(() => {
+                cover.classList.add('is-exiting');
+            }, exitDelay - 180);
+
+            window.setTimeout(() => {
+                cover.classList.add('hidden');
+            }, exitDelay);
         });
     } else {
         // No cover - show content immediately
