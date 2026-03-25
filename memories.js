@@ -3,10 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Guest Memories Logic
      * - Supabase Integration
-     * - Client-side Image Compression (2K High Quality)
-     * - Real-time Gallery
-     * - Face-api.js Integration (Find My Photos)
+     * - Unified upload state for picker and drag/drop
+     * - Client-side image compression
+     * - Stored face embeddings for faster matching
      */
+
+    const FACE_MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
+    const MATCH_DISTANCE_THRESHOLD = 0.6;
+    const MAX_UPLOAD_DIMENSION = 2048;
+    const JPEG_QUALITY = 0.85;
 
     // --- SUPABASE INITIALIZATION ---
     if (typeof CONFIG === 'undefined') {
@@ -14,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Config file (config.js) not found. Please ensure it exists.');
         return;
     }
+
     const { SUPABASE_URL, SUPABASE_ANON_KEY } = CONFIG;
 
     let supabaseClient = null;
@@ -29,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('file-input');
     const previewContainer = document.getElementById('preview-container');
     const previewGrid = document.getElementById('preview-grid');
-    const uploadPreview = document.getElementById('upload-preview');
     const cancelUpload = document.getElementById('cancel-upload');
     const confirmUpload = document.getElementById('confirm-upload');
     const uploadProgress = document.getElementById('upload-progress');
@@ -44,94 +49,126 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterStatus = document.getElementById('filter-status');
     const clearFilter = document.getElementById('clear-filter');
 
+    // --- STATE ---
     let modelsLoaded = false;
+    let modelsPromise = null;
+    let selectedFiles = [];
 
     // --- MODEL LOADING ---
+    /**
+     * Loads the face detection and recognition models once.
+     * @returns {Promise<void>}
+     */
     async function loadModels() {
+        if (modelsLoaded) return;
+        if (modelsPromise) return modelsPromise;
         if (typeof faceapi === 'undefined') {
-            console.error('face-api.js not loaded!');
-            return;
+            throw new Error('face-api.js not loaded');
         }
-        const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
-        try {
-            await Promise.all([
-                faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
-                faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-                faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
-            ]);
+
+        modelsPromise = Promise.all([
+            faceapi.nets.ssdMobilenetv1.loadFromUri(FACE_MODEL_URL),
+            faceapi.nets.faceLandmark68Net.loadFromUri(FACE_MODEL_URL),
+            faceapi.nets.faceRecognitionNet.loadFromUri(FACE_MODEL_URL)
+        ]).then(() => {
             modelsLoaded = true;
             console.log('Face models loaded');
-        } catch (err) {
-            console.error('Failed to load face models:', err);
-        }
+        }).catch((error) => {
+            modelsPromise = null;
+            throw error;
+        });
+
+        return modelsPromise;
     }
-    loadModels();
+
+    loadModels().catch((error) => {
+        console.error('Failed to load face models:', error);
+    });
 
     // --- MODAL CONTROLS ---
     if (uploadBtn) {
-        uploadBtn.onclick = () => {
+        uploadBtn.addEventListener('click', () => {
             if (!supabaseClient) {
                 alert('Please configure Supabase credentials in config.js first!');
                 return;
             }
             uploadModal.style.display = 'block';
-        };
+        });
     }
 
-    closeBtns.forEach(btn => {
-        btn.onclick = (e) => {
-            const modal = e.target.closest('.modal');
+    closeBtns.forEach((btn) => {
+        btn.addEventListener('click', (event) => {
+            const modal = event.target.closest('.modal');
             if (modal) modal.style.display = 'none';
             resetUpload();
-        };
+            resetFaceSearch();
+        });
     });
 
-    window.onclick = (event) => {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
-            resetUpload();
-        }
-    };
+    window.addEventListener('click', (event) => {
+        if (!event.target.classList.contains('modal')) return;
+        event.target.style.display = 'none';
+        resetUpload();
+        resetFaceSearch();
+    });
 
     // --- UPLOAD LOGIC ---
     if (dropZone) {
-        dropZone.onclick = () => fileInput.click();
+        dropZone.addEventListener('click', () => fileInput.click());
 
-        dropZone.ondragover = (e) => {
-            e.preventDefault();
+        dropZone.addEventListener('dragover', (event) => {
+            event.preventDefault();
             dropZone.classList.add('active');
-        };
+        });
 
-        dropZone.ondragleave = () => dropZone.classList.remove('active');
-
-        dropZone.ondrop = (e) => {
-            e.preventDefault();
+        dropZone.addEventListener('dragleave', () => {
             dropZone.classList.remove('active');
-            const file = e.dataTransfer.files[0];
-            if (file) handleFileSelect(file);
-        };
+        });
+
+        dropZone.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropZone.classList.remove('active');
+            updateSelectedFiles(Array.from(event.dataTransfer.files));
+        });
     }
 
     if (fileInput) {
-        fileInput.onchange = (e) => {
-            const files = Array.from(e.target.files);
-            if (files.length) handleFileSelect(files);
-        };
+        fileInput.addEventListener('change', (event) => {
+            updateSelectedFiles(Array.from(event.target.files));
+        });
     }
 
-    function handleFileSelect(files) {
-        const validFiles = files.filter(file => file.type.startsWith('image/'));
+    /**
+     * Stores the selected upload files in one shared state for both picker and drag/drop.
+     * @param {File[]} files - Candidate files from the picker or drop zone
+     * @returns {void}
+     */
+    function updateSelectedFiles(files) {
+        const validFiles = files.filter((file) => file.type.startsWith('image/'));
         if (validFiles.length === 0) {
             alert('Please select image files.');
             return;
         }
 
+        selectedFiles = validFiles;
+        renderSelectedFiles();
+    }
+
+    /**
+     * Renders the current upload selection preview grid.
+     * @returns {void}
+     */
+    function renderSelectedFiles() {
+        if (!previewGrid) return;
+
         previewGrid.innerHTML = '';
-        validFiles.forEach(file => {
+
+        selectedFiles.forEach((file) => {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = (event) => {
                 const img = document.createElement('img');
-                img.src = e.target.result;
+                img.src = event.target.result;
+                img.alt = file.name;
                 previewGrid.appendChild(img);
             };
             reader.readAsDataURL(file);
@@ -141,39 +178,50 @@ document.addEventListener('DOMContentLoaded', () => {
         if (previewContainer) previewContainer.classList.remove('hidden');
     }
 
+    /**
+     * Resets upload UI and file state.
+     * @returns {void}
+     */
     function resetUpload() {
+        selectedFiles = [];
         if (fileInput) fileInput.value = '';
         if (dropZone) dropZone.classList.remove('hidden');
         if (previewContainer) previewContainer.classList.add('hidden');
         if (uploadProgress) uploadProgress.classList.add('hidden');
         if (progressFill) progressFill.style.width = '0%';
         if (previewGrid) previewGrid.innerHTML = '';
+        if (confirmUpload) confirmUpload.disabled = false;
     }
 
-    if (cancelUpload) cancelUpload.onclick = resetUpload;
+    if (cancelUpload) {
+        cancelUpload.addEventListener('click', resetUpload);
+    }
 
     if (confirmUpload) {
-        confirmUpload.onclick = async () => {
-            const files = Array.from(fileInput.files);
-            if (!files.length) return;
+        confirmUpload.addEventListener('click', async () => {
+            if (!selectedFiles.length || !supabaseClient) return;
 
             confirmUpload.disabled = true;
             uploadProgress.classList.remove('hidden');
 
             let uploadedCount = 0;
-            const totalFiles = files.length;
+            const totalFiles = selectedFiles.length;
 
             try {
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const progress = ((i + 1) / totalFiles) * 100;
+                for (const [index, file] of selectedFiles.entries()) {
+                    const progress = ((index + 1) / totalFiles) * 100;
                     progressFill.style.width = `${progress}%`;
 
                     const optimizedBlob = await compressImage(file);
-                    const fileName = `${Date.now()}-${i}-${Math.random().toString(36).substring(7)}.jpg`;
-                    const { data: storageData, error: storageError } = await supabaseClient.storage
+                    const faceEmbedding = await extractFaceEmbedding(optimizedBlob);
+                    const fileName = `${Date.now()}-${index}-${Math.random().toString(36).slice(2, 10)}.jpg`;
+
+                    const { error: storageError } = await supabaseClient.storage
                         .from('memories')
-                        .upload(fileName, optimizedBlob);
+                        .upload(fileName, optimizedBlob, {
+                            contentType: 'image/jpeg',
+                            upsert: false
+                        });
 
                     if (storageError) throw storageError;
 
@@ -181,9 +229,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         .from('memories')
                         .getPublicUrl(fileName);
 
+                    const photoRecord = {
+                        url: publicUrl,
+                        storage_path: fileName,
+                        face_embedding: faceEmbedding
+                    };
+
                     const { error: dbError } = await supabaseClient
                         .from('photos')
-                        .insert([{ url: publicUrl, storage_path: fileName }]);
+                        .insert([photoRecord]);
 
                     if (dbError) throw dbError;
                     uploadedCount++;
@@ -192,112 +246,207 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     uploadModal.style.display = 'none';
                     resetUpload();
-                    confirmUpload.disabled = false;
                     fetchMemories();
                 }, 500);
-
-            } catch (err) {
-                console.error('Upload failed:', err);
-                alert(`Uploaded ${uploadedCount} of ${totalFiles} photos. Error: ${err.message}`);
+            } catch (error) {
+                console.error('Upload failed:', error);
+                alert(`Uploaded ${uploadedCount} of ${totalFiles} photos. Error: ${error.message}`);
                 confirmUpload.disabled = false;
             }
-        };
+        });
     }
 
     /**
-     * Image Compression Logic
-     * Resizes to 2048px max width/height while maintaining aspect ratio.
+     * Compresses an image to a JPEG blob while preserving aspect ratio.
+     * @param {File|Blob} file - Original image file/blob
+     * @returns {Promise<Blob>}
      */
     function compressImage(file) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = (event) => {
                 const img = new Image();
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    const max = 2048;
+                    let { width, height } = img;
 
-                    if (width > height && width > max) {
-                        height *= max / width;
-                        width = max;
-                    } else if (height > max) {
-                        width *= max / height;
-                        height = max;
+                    if (width > height && width > MAX_UPLOAD_DIMENSION) {
+                        height *= MAX_UPLOAD_DIMENSION / width;
+                        width = MAX_UPLOAD_DIMENSION;
+                    } else if (height > MAX_UPLOAD_DIMENSION) {
+                        width *= MAX_UPLOAD_DIMENSION / height;
+                        height = MAX_UPLOAD_DIMENSION;
                     }
 
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
+                    canvas.width = Math.round(width);
+                    canvas.height = Math.round(height);
 
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) {
+                        reject(new Error('Canvas context unavailable'));
+                        return;
+                    }
+
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     canvas.toBlob((blob) => {
+                        if (!blob) {
+                            reject(new Error('Image compression failed'));
+                            return;
+                        }
                         resolve(blob);
-                    }, 'image/jpeg', 0.85); // High quality 85%
+                    }, 'image/jpeg', JPEG_QUALITY);
                 };
-                img.src = e.target.result;
+                img.onerror = () => reject(new Error('Image preview failed to load'));
+                img.src = event.target.result;
             };
+            reader.onerror = () => reject(new Error('Could not read the selected file'));
             reader.readAsDataURL(file);
         });
     }
 
+    /**
+     * Extracts a single face embedding from an uploaded image.
+     * Returns null when no recognizable face is found so uploads still succeed.
+     * @param {Blob} imageBlob - Optimized upload image
+     * @returns {Promise<string|null>}
+     */
+    async function extractFaceEmbedding(imageBlob) {
+        try {
+            await loadModels();
+            const image = await faceapi.bufferToImage(imageBlob);
+            const detection = await faceapi
+                .detectSingleFace(image)
+                .withFaceLandmarks()
+                .withFaceDescriptor();
+
+            if (!detection) return null;
+            return vectorToString(detection.descriptor);
+        } catch (error) {
+            console.warn('Skipping face embedding for this upload:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Converts a face descriptor to a pgvector-compatible string.
+     * @param {Float32Array|number[]} vector - Face descriptor values
+     * @returns {string}
+     */
+    function vectorToString(vector) {
+        return `[${Array.from(vector).join(',')}]`;
+    }
+
+    /**
+     * Parses a stored pgvector value into a number array.
+     * @param {string|number[]|null} value - Stored vector value
+     * @returns {number[]|null}
+     */
+    function parseVector(value) {
+        if (!value) return null;
+        if (Array.isArray(value)) return value.map(Number);
+
+        if (typeof value === 'string') {
+            try {
+                return JSON.parse(value).map(Number);
+            } catch (error) {
+                console.warn('Could not parse stored face embedding:', error);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Computes Euclidean distance between two descriptors.
+     * @param {Float32Array|number[]} left - First descriptor
+     * @param {Float32Array|number[]} right - Second descriptor
+     * @returns {number}
+     */
+    function euclideanDistance(left, right) {
+        if (!left || !right || left.length !== right.length) return Number.POSITIVE_INFINITY;
+
+        let sum = 0;
+        for (let index = 0; index < left.length; index++) {
+            const delta = Number(left[index]) - Number(right[index]);
+            sum += delta * delta;
+        }
+
+        return Math.sqrt(sum);
+    }
+
     // --- GALLERY LOGIC ---
+    /**
+     * Loads the latest gallery photos from Supabase.
+     * @returns {Promise<void>}
+     */
     async function fetchMemories() {
         if (!supabaseClient) {
             console.error('fetchMemories called but supabaseClient is null');
             return;
         }
 
-        console.log('🔄 Fetching memories from Supabase...');
         const { data, error } = await supabaseClient
             .from('photos')
-            .select('*')
+            .select('id, created_at, url, storage_path')
             .order('created_at', { ascending: false });
 
         if (error) {
-            console.error('❌ Fetch error:', error);
+            console.error('Photo fetch failed:', error);
             if (memoriesGrid) {
                 memoriesGrid.innerHTML = `
                     <div class="gallery-loader">
                         <i class="fas fa-exclamation-triangle" style="color: #ff4d4d; font-size: 2rem; margin-bottom: 10px;"></i>
                         <p>Failed to load photos: ${error.message}</p>
-                        <button onclick="location.reload()" class="outline-btn" style="margin-top: 10px;">Try Again</button>
+                        <button id="retry-gallery" class="outline-btn" style="margin-top: 10px;">Try Again</button>
                     </div>`;
+
+                const retryBtn = document.getElementById('retry-gallery');
+                if (retryBtn) {
+                    retryBtn.addEventListener('click', () => {
+                        fetchMemories();
+                    });
+                }
             }
             return;
         }
 
-        console.log('✅ Successfully fetched data:', data);
-        renderGallery(data);
+        renderGallery(data || []);
     }
 
     // --- FACE SEARCH LOGIC ---
     if (findMeBtn) {
-        findMeBtn.onclick = async () => {
-            if (!modelsLoaded) {
-                alert('Models still loading, please wait a moment...');
+        findMeBtn.addEventListener('click', async () => {
+            try {
+                await loadModels();
+            } catch (error) {
+                console.error('Models still unavailable:', error);
+                alert('Face matching models are still loading. Please try again in a moment.');
                 return;
             }
+
             faceModal.style.display = 'block';
-        };
+        });
     }
 
     if (faceDropZone) {
-        faceDropZone.onclick = () => faceInput.click();
+        faceDropZone.addEventListener('click', () => faceInput.click());
     }
 
     if (faceInput) {
-        faceInput.onchange = async (e) => {
-            const file = e.target.files[0];
+        faceInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
             if (!file) return;
 
             faceDropZone.classList.add('hidden');
             faceProcessing.classList.remove('hidden');
 
             try {
-                const img = await faceapi.bufferToImage(file);
-                const detection = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+                await loadModels();
+                const image = await faceapi.bufferToImage(file);
+                const detection = await faceapi
+                    .detectSingleFace(image)
+                    .withFaceLandmarks()
+                    .withFaceDescriptor();
 
                 if (!detection) {
                     alert('No face detected. Please try a clearer selfie!');
@@ -306,64 +455,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 await performFaceSearch(detection.descriptor);
-
-            } catch (err) {
-                console.error('Face search failed:', err);
+            } catch (error) {
+                console.error('Face search failed:', error);
                 alert('Face search failed. Please try again.');
                 resetFaceSearch();
             }
-        };
+        });
     }
 
-    async function performFaceSearch(targetDescriptor) {
-        const { data: photos, error } = await supabaseClient.from('photos').select('*');
+    /**
+     * Queries matching photos using stored face embeddings.
+     * Falls back to local vector comparison when the SQL helper is unavailable.
+     * @param {Float32Array} targetDescriptor - Descriptor from the selfie photo
+     * @returns {Promise<Object[]>}
+     */
+    async function queryMatchedPhotos(targetDescriptor) {
+        const queryEmbedding = vectorToString(targetDescriptor);
+
+        const rpcResponse = await supabaseClient.rpc('match_photos_by_embedding', {
+            query_embedding: queryEmbedding,
+            match_threshold: MATCH_DISTANCE_THRESHOLD,
+            match_count: 200
+        });
+
+        if (!rpcResponse.error) {
+            return rpcResponse.data || [];
+        }
+
+        console.warn('match_photos_by_embedding RPC unavailable, falling back to local embedding comparison:', rpcResponse.error);
+
+        const { data: photos, error } = await supabaseClient
+            .from('photos')
+            .select('id, created_at, url, storage_path, face_embedding')
+            .not('face_embedding', 'is', null);
+
         if (error) throw error;
 
-        const matchedPhotos = [];
-        const SIMILARITY_THRESHOLD = 0.6; // Distance threshold (lower = more similar, face-api uses euclidean distance)
+        return (photos || [])
+            .map((photo) => {
+                const storedEmbedding = parseVector(photo.face_embedding);
+                return {
+                    ...photo,
+                    distance: euclideanDistance(targetDescriptor, storedEmbedding)
+                };
+            })
+            .filter((photo) => Number.isFinite(photo.distance) && photo.distance <= MATCH_DISTANCE_THRESHOLD)
+            .sort((left, right) => left.distance - right.distance);
+    }
 
-        // Scan gallery for matches
-        for (const photo of photos) {
-            try {
-                // Load and detect faces in the gallery photo
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-
-                await new Promise((resolve, reject) => {
-                    img.onload = resolve;
-                    img.onerror = reject;
-                    img.src = photo.url;
-                });
-
-                const detection = await faceapi
-                    .detectSingleFace(img)
-                    .withFaceLandmarks()
-                    .withFaceDescriptor();
-
-                if (detection) {
-                    // Calculate distance between target and detected face
-                    const distance = faceapi.euclideanDistance(targetDescriptor, detection.descriptor);
-
-                    // If distance is below threshold, it's a match
-                    if (distance < SIMILARITY_THRESHOLD) {
-                        matchedPhotos.push(photo);
-                    }
-                }
-            } catch (err) {
-                console.warn('Could not process photo:', photo.id, err);
-                // Continue with next photo if this one fails
-            }
-        }
+    /**
+     * Runs the photo face match flow and updates the gallery.
+     * @param {Float32Array} targetDescriptor - Descriptor from the selfie photo
+     * @returns {Promise<void>}
+     */
+    async function performFaceSearch(targetDescriptor) {
+        const matchedPhotos = await queryMatchedPhotos(targetDescriptor);
 
         renderGallery(matchedPhotos);
         if (filterStatus) filterStatus.classList.remove('hidden');
+
         if (matchedPhotos.length === 0) {
             alert('No photos found with your face. Try a clearer selfie!');
         }
+
         if (faceModal) faceModal.style.display = 'none';
         resetFaceSearch();
     }
 
+    /**
+     * Resets the face search modal state.
+     * @returns {void}
+     */
     function resetFaceSearch() {
         if (faceInput) faceInput.value = '';
         if (faceDropZone) faceDropZone.classList.remove('hidden');
@@ -371,10 +533,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (clearFilter) {
-        clearFilter.onclick = () => {
+        clearFilter.addEventListener('click', () => {
             filterStatus.classList.add('hidden');
             fetchMemories();
-        };
+        });
     }
 
     // --- LIGHTBOX LOGIC ---
@@ -387,30 +549,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentGalleryPhotos = [];
     let currentIndex = 0;
 
-    // Use a function that can be called globally or via event delegation
-    const openLightbox = (url) => {
+    /**
+     * Opens the lightbox for the selected photo URL.
+     * @param {string} url - Selected image URL
+     * @returns {void}
+     */
+    function openLightbox(url) {
         const photos = Array.from(memoriesGrid.querySelectorAll('.gallery-item img'));
-        currentGalleryPhotos = photos.map(img => img.src);
+        currentGalleryPhotos = photos.map((img) => img.src);
+        currentIndex = currentGalleryPhotos.findIndex((src) => src === url);
 
-        // Find the absolute URL match
-        currentIndex = currentGalleryPhotos.findIndex(src => src === url);
-
-        // If not found by exact match, try relative match or just find by src
         if (currentIndex === -1) {
-            currentIndex = currentGalleryPhotos.indexOf(url);
-        }
-
-        if (currentIndex !== -1) {
-            updateLightboxImage();
-            if (lightbox) lightbox.classList.add('show');
-            document.body.classList.add('lightbox-open');
-        } else {
             console.error('Photo not found in gallery list:', url);
+            return;
         }
-    };
 
-    // Expose to window just in case anything else tries to call it
-    window.openLightbox = openLightbox;
+        updateLightboxImage();
+        if (lightbox) lightbox.classList.add('show');
+        document.body.classList.add('lightbox-open');
+    }
 
     function updateLightboxImage() {
         if (!lightboxImg || currentIndex === -1) return;
@@ -433,12 +590,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const fileName = `memory-${Date.now()}.jpg`;
 
         try {
-            // Fetch the image as a blob to support external URLs better
             const response = await fetch(imageUrl);
             if (!response.ok) throw new Error('Failed to fetch image');
-            const blob = await response.blob();
 
-            // Create object URL and trigger download
+            const blob = await response.blob();
             const blobUrl = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = blobUrl;
@@ -447,7 +602,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.appendChild(link);
             link.click();
 
-            // Cleanup
             setTimeout(() => {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(blobUrl);
@@ -470,67 +624,76 @@ document.addEventListener('DOMContentLoaded', () => {
         updateLightboxImage();
     }
 
-    if (lightboxClose) lightboxClose.onclick = closeLightbox;
-    if (lightboxPrev) lightboxPrev.onclick = (e) => { e.stopPropagation(); showPrev(); };
-    if (lightboxNext) lightboxNext.onclick = (e) => { e.stopPropagation(); showNext(); };
-    if (lightboxDownload) lightboxDownload.onclick = (e) => { e.stopPropagation(); downloadCurrentPhoto(); };
-    if (lightbox) lightbox.onclick = (e) => { if (e.target === lightbox) closeLightbox(); };
-
-    document.addEventListener('keydown', (e) => {
-        if (!lightbox || !lightbox.classList.contains('show')) return;
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowRight') showNext();
-        if (e.key === 'ArrowLeft') showPrev();
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightboxPrev) lightboxPrev.addEventListener('click', (event) => {
+        event.stopPropagation();
+        showPrev();
+    });
+    if (lightboxNext) lightboxNext.addEventListener('click', (event) => {
+        event.stopPropagation();
+        showNext();
+    });
+    if (lightboxDownload) lightboxDownload.addEventListener('click', (event) => {
+        event.stopPropagation();
+        downloadCurrentPhoto();
+    });
+    if (lightbox) lightbox.addEventListener('click', (event) => {
+        if (event.target === lightbox) closeLightbox();
     });
 
-    // Event Delegation for Gallery Images
+    document.addEventListener('keydown', (event) => {
+        if (!lightbox || !lightbox.classList.contains('show')) return;
+        if (event.key === 'Escape') closeLightbox();
+        if (event.key === 'ArrowRight') showNext();
+        if (event.key === 'ArrowLeft') showPrev();
+    });
+
     if (memoriesGrid) {
-        memoriesGrid.addEventListener('click', (e) => {
-            const item = e.target.closest('.gallery-item');
-            if (item) {
-                const img = item.querySelector('img');
-                if (img) {
-                    console.log('🔍 Lightbox opening for:', img.src);
-                    openLightbox(img.src);
-                }
-            }
+        memoriesGrid.addEventListener('click', (event) => {
+            const item = event.target.closest('.gallery-item');
+            if (!item) return;
+
+            const img = item.querySelector('img');
+            if (img) openLightbox(img.src);
         });
     }
 
+    /**
+     * Renders a photo list into the memories grid.
+     * @param {Object[]} photos - Gallery photos
+     * @returns {void}
+     */
     function renderGallery(photos) {
         if (!memoriesGrid) return;
+
         if (photos.length === 0) {
             memoriesGrid.innerHTML = '<div class="gallery-loader"><p>No photos found. Be the first to share a memory!</p></div>';
             return;
         }
 
-        console.log(`🖼️ Rendering ${photos.length} photos...`);
-        // Remove inline onclick handler
-        memoriesGrid.innerHTML = photos.map(photo => `
+        memoriesGrid.innerHTML = photos.map((photo) => `
             <div class="gallery-item fade-in">
                 <img src="${photo.url}" alt="Wedding Memory" loading="lazy">
             </div>
         `).join('');
 
-        // Trigger fade-in animation for new items
         setTimeout(() => {
             const items = memoriesGrid.querySelectorAll('.gallery-item');
             items.forEach((item, index) => {
                 setTimeout(() => {
                     item.classList.add('appear');
-                }, index * 100); // Staggered entrance
+                }, index * 100);
             });
         }, 50);
     }
 
-    // Initial Load
+    // --- INITIAL LOAD ---
     if (supabaseClient) {
         fetchMemories();
 
-        // Real-time updates
         supabaseClient
             .channel('public:photos')
-            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'photos' }, payload => {
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'photos' }, () => {
                 fetchMemories();
             })
             .subscribe();

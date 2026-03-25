@@ -188,13 +188,13 @@ document.addEventListener('DOMContentLoaded', () => {
     addToCalendarBtn.addEventListener('click', () => {
         // Google Calendar Format
         const title = encodeURIComponent("Ashith & Sujishna's Wedding");
-        const details = encodeURIComponent("Join us to celebrate our wedding! \n\nWedding: 10:00 AM at Shaa International, Chettuva \nReception: 5:00 PM at Jubily Hall, Katoor");
-        const location = encodeURIComponent("Shaa International, Chettuva, Kerala");
+        const details = encodeURIComponent("Join us to celebrate our wedding!\n\nWedding Ceremony: 9:45 AM - 10:30 AM at SHA International Auditorium, Chettuva\nReception: 4:00 PM - 7:00 PM at Jubilee Convention Centre, Kattoor");
+        const location = encodeURIComponent("SHA International Auditorium, Chettuva, Kerala");
 
         // Dates must be in format YYYYMMDDTHHmmssZ (UTC time) or just YYYYMMDD/YYYYMMDD for whole day
-        // Using local timezone offset format roughly for May 3 2026:
-        const startTime = "20260503T043000Z"; // Approx 10:00 AM IST in UTC (subtract 5.5 hours)
-        const endTime = "20260503T163000Z";   // Approx 10:00 PM IST in UTC
+        // The calendar event spans the full wedding day itinerary in IST.
+        const startTime = "20260503T041500Z"; // 9:45 AM IST
+        const endTime = "20260503T133000Z";   // 7:00 PM IST
 
         const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
 
