@@ -677,6 +677,19 @@ body.malayalam .hero::after {
     text-transform: uppercase;
 }
 
+body.malayalam .ml-hero-date {
+    font-family: 'Manjari', var(--font-heading);
+    letter-spacing: 0.06em;
+    text-transform: none;
+    font-size: 1.72rem;
+}
+
+body.malayalam .ml-date-number {
+    font-family: var(--font-body);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+}
+
 .hero-date-wrapper::after {
     content: '';
     position: absolute;
@@ -883,6 +896,54 @@ body.malayalam .hero::after {
 .signature-address {
     font-size: 0.95rem;
     color: #5a4a3a;
+}
+
+/* English invitation note refinement */
+body:not(.malayalam) .invitation-note .container {
+    max-width: 820px;
+}
+
+body:not(.malayalam) .invitation-text {
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+    font-style: italic;
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+    text-align: center;
+    text-indent: 0;
+    margin-bottom: 22px;
+}
+
+body:not(.malayalam) .invitation-text:first-of-type::first-letter {
+    float: none;
+    font-size: inherit;
+    line-height: inherit;
+    padding-right: 0;
+    color: inherit;
+    font-family: inherit;
+}
+
+body:not(.malayalam) .invitation-signature {
+    margin-top: 36px;
+    text-align: center;
+    padding-right: 0;
+}
+
+body:not(.malayalam) .signature-names {
+    font-family: var(--font-heading);
+    color: #2c1810;
+    margin-bottom: 0;
+}
+
+body:not(.malayalam) .invitation-signature .signature-names:first-child {
+    font-size: 1.3rem;
+    font-style: italic;
+    opacity: 0.82;
+}
+
+body:not(.malayalam) .invitation-signature .signature-names:last-child {
+    font-size: 2.1rem;
+    letter-spacing: 0.04em;
 }
 
 /* --- Events Section --- */
