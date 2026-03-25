@@ -906,6 +906,17 @@ body.malayalam .hero::after {
     max-width: 800px;
 }
 
+body.malayalam .hero .ml-invite-title {
+    font-family: 'Gayathri', 'Manjari', var(--font-heading);
+    font-size: clamp(1.65rem, 5vw, 2.15rem);
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--primary-light);
+    margin-bottom: 14px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+}
+
 .hero-actions {
     display: flex;
     justify-content: center;
@@ -1242,6 +1253,143 @@ body:not(.malayalam) .invitation-signature .signature-names:first-child {
 body:not(.malayalam) .invitation-signature .signature-names:last-child {
     font-size: 2.1rem;
     letter-spacing: 0.04em;
+}
+
+/* Malayalam typography system */
+body.malayalam {
+    --font-ml-display: 'Gayathri', 'Manjari', var(--font-heading);
+    --font-ml-text: 'Manjari', var(--font-body);
+    --font-ml-numeric: var(--font-body);
+}
+
+body.malayalam .cover-tap,
+body.malayalam .primary-btn,
+body.malayalam .outline-btn,
+body.malayalam .countdown-item .label,
+body.malayalam .invitation-text,
+body.malayalam .signature-address,
+body.malayalam .event-card-badge,
+body.malayalam .event-date-chip,
+body.malayalam .event-detail-row,
+body.malayalam .modal-content p,
+body.malayalam #qr-label,
+body.malayalam footer p {
+    font-family: var(--font-ml-text);
+}
+
+body.malayalam .ml-invite-title,
+body.malayalam .section-title,
+body.malayalam .event-card h3,
+body.malayalam .footer-names,
+body.malayalam .signature-names,
+body.malayalam .modal-content h3 {
+    font-family: var(--font-ml-display);
+    font-style: normal;
+}
+
+body.malayalam .cover-tap {
+    font-size: clamp(1rem, 3.6vw, 1.12rem);
+    letter-spacing: 0.02em;
+}
+
+body.malayalam .ml-hero-date {
+    font-family: var(--font-ml-text);
+    font-size: clamp(1.18rem, 4.8vw, 1.72rem);
+    letter-spacing: 0.03em;
+}
+
+body.malayalam .ml-date-number,
+body.malayalam .countdown-item span:first-child,
+body.malayalam .event-date-chip,
+body.malayalam .event-detail-row,
+body.malayalam .copyright {
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: 'lnum' 1, 'tnum' 1;
+}
+
+body.malayalam .countdown-item span:first-child {
+    font-family: var(--font-ml-numeric);
+    font-weight: 500;
+}
+
+body.malayalam .countdown-item .label {
+    font-size: clamp(0.76rem, 2.7vw, 0.86rem);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+}
+
+body.malayalam .primary-btn,
+body.malayalam .outline-btn {
+    text-transform: none;
+    letter-spacing: 0.01em;
+}
+
+body.malayalam .section-title {
+    letter-spacing: 0.02em;
+}
+
+body.malayalam .invitation-text {
+    font-size: clamp(1.08rem, 4.2vw, 1.32rem);
+    line-height: 1.9;
+    text-align: left;
+    text-indent: 0;
+}
+
+body.malayalam .invitation-text:first-of-type::first-letter {
+    float: none;
+    font-size: inherit;
+    line-height: inherit;
+    padding-right: 0;
+    color: inherit;
+    font-family: inherit;
+}
+
+body.malayalam .invitation-signature {
+    text-align: center;
+    padding-right: 0;
+}
+
+body.malayalam .signature-names {
+    font-size: clamp(1.35rem, 5vw, 1.65rem);
+    letter-spacing: 0.02em;
+}
+
+body.malayalam .signature-address {
+    font-size: clamp(0.94rem, 3.4vw, 1rem);
+    line-height: 1.7;
+}
+
+body.malayalam .event-card-badge {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: none;
+}
+
+body.malayalam .event-card h3 {
+    letter-spacing: 0.03em;
+}
+
+body.malayalam .event-date-chip {
+    letter-spacing: 0.03em;
+    text-transform: none;
+}
+
+body.malayalam .event-detail-row {
+    font-size: 0.94rem;
+    line-height: 1.6;
+}
+
+body.malayalam .event-card .outline-btn {
+    font-size: 0.86rem;
+}
+
+body.malayalam .footer-names {
+    letter-spacing: 0.02em;
+}
+
+body.malayalam .modal-content h3 {
+    letter-spacing: 0.02em;
 }
 
 /* --- Events Section --- */
