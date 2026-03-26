@@ -1207,20 +1207,79 @@ body.malayalam .ml-date-number {
     color: #5a4a3a;
 }
 
-/* English invitation note refinement */
+/* English cinematic styling */
+body:not(.malayalam) .hero-overlay {
+    background:
+        linear-gradient(180deg, rgba(8, 6, 8, 0.18) 0%, rgba(12, 10, 12, 0.36) 45%, rgba(14, 10, 12, 0.72) 100%),
+        radial-gradient(circle at 24% 18%, rgba(214, 175, 110, 0.12) 0%, transparent 30%),
+        radial-gradient(circle at 78% 20%, rgba(255, 232, 198, 0.08) 0%, transparent 24%);
+}
+
+body:not(.malayalam) .hero-content {
+    max-width: 920px;
+}
+
+body:not(.malayalam) .subtitle {
+    color: #f1d9b8;
+    font-weight: 500;
+    letter-spacing: clamp(4px, 1.2vw, 8px);
+    margin-bottom: 16px;
+}
+
+body:not(.malayalam) .hero .names {
+    text-shadow: 0 12px 34px rgba(0, 0, 0, 0.38);
+}
+
+body:not(.malayalam) .invitation-note {
+    background: linear-gradient(180deg, #130d10 0%, #1b1417 55%, #241a1c 100%);
+}
+
+body:not(.malayalam) .invitation-note::before {
+    background-image:
+        radial-gradient(circle at 15% 15%, rgba(212, 175, 110, 0.09) 0%, transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(255, 230, 192, 0.05) 0%, transparent 24%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 55%);
+}
+
+body:not(.malayalam) .invitation-note::after {
+    border-color: rgba(214, 175, 110, 0.16);
+}
+
 body:not(.malayalam) .invitation-note .container {
     max-width: 820px;
+    padding: clamp(28px, 6vw, 56px);
+    background: linear-gradient(160deg, rgba(22, 15, 18, 0.9), rgba(34, 24, 27, 0.82));
+    border: 1px solid rgba(214, 175, 110, 0.2);
+    border-radius: 28px;
+    box-shadow: 0 26px 80px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(14px);
+}
+
+body:not(.malayalam) .invitation-note .container::before,
+body:not(.malayalam) .invitation-note .container::after {
+    color: rgba(233, 203, 164, 0.55);
+    font-size: 1rem;
+}
+
+body:not(.malayalam) .invitation-kicker {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: #d7b88b;
+    margin-bottom: 18px;
 }
 
 body:not(.malayalam) .invitation-text {
     font-family: var(--font-heading);
-    font-size: 1.7rem;
+    font-size: clamp(1.45rem, 4vw, 1.85rem);
     font-style: italic;
     line-height: 1.75;
     letter-spacing: 0.01em;
     text-align: center;
     text-indent: 0;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
+    color: #f7ede1;
 }
 
 body:not(.malayalam) .invitation-text:first-of-type::first-letter {
@@ -1240,7 +1299,7 @@ body:not(.malayalam) .invitation-signature {
 
 body:not(.malayalam) .signature-names {
     font-family: var(--font-heading);
-    color: #2c1810;
+    color: #f7eadf;
     margin-bottom: 0;
 }
 
@@ -1253,6 +1312,69 @@ body:not(.malayalam) .invitation-signature .signature-names:first-child {
 body:not(.malayalam) .invitation-signature .signature-names:last-child {
     font-size: 2.1rem;
     letter-spacing: 0.04em;
+}
+
+body:not(.malayalam) .events {
+    background: linear-gradient(160deg, #110c0f 0%, #1b1417 42%, #241a1c 100%);
+}
+
+body:not(.malayalam) .events-eyebrow {
+    color: #d8bd93;
+    letter-spacing: 6px;
+}
+
+body:not(.malayalam) .event-card {
+    background: linear-gradient(160deg, rgba(28, 20, 22, 0.98), rgba(19, 14, 15, 0.96));
+    border: 1px solid rgba(214, 175, 110, 0.16);
+    border-radius: 22px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+body:not(.malayalam) .gallery {
+    background: linear-gradient(180deg, #130f11 0%, #1b1517 100%);
+}
+
+body:not(.malayalam) .gallery-kicker {
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: #d8bd93;
+    margin-bottom: 10px;
+}
+
+body:not(.malayalam) .gallery .section-title {
+    color: #f5ecd7;
+}
+
+body:not(.malayalam) .gallery .divider {
+    background: linear-gradient(90deg, transparent, rgba(214, 175, 110, 0.95), transparent);
+}
+
+body:not(.malayalam) .gallery-sub {
+    color: #cdbca5;
+    max-width: 560px;
+    margin: 0 auto 42px;
+}
+
+body:not(.malayalam) .gallery-item {
+    border-radius: 18px;
+    border: 1px solid rgba(214, 175, 110, 0.14);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
+    background: #110d0e;
+}
+
+body:not(.malayalam) .gallery-item img {
+    filter: saturate(0.94) contrast(1.04);
+}
+
+body:not(.malayalam) footer {
+    background: linear-gradient(180deg, #110b0d 0%, #1a1214 100%);
+}
+
+body:not(.malayalam) footer p {
+    color: #e8d8c5;
 }
 
 /* Malayalam typography system */
@@ -1390,6 +1512,143 @@ body.malayalam .footer-names {
 
 body.malayalam .modal-content h3 {
     letter-spacing: 0.02em;
+}
+
+/* Malayalam ceremonial invitation styling */
+body.malayalam .events {
+    background: linear-gradient(180deg, #efe1c6 0%, #e7d3b2 52%, #dcc39d 100%);
+}
+
+body.malayalam .events::before {
+    background-image:
+        radial-gradient(circle at 18% 24%, rgba(138, 92, 42, 0.08) 0%, transparent 30%),
+        radial-gradient(circle at 82% 18%, rgba(173, 126, 73, 0.08) 0%, transparent 26%),
+        repeating-linear-gradient(90deg, transparent, transparent 26px, rgba(138, 92, 42, 0.03) 26px, rgba(138, 92, 42, 0.03) 27px);
+}
+
+body.malayalam .events-eyebrow {
+    font-family: var(--font-ml-display);
+    font-size: clamp(0.84rem, 3.1vw, 1rem);
+    letter-spacing: 0.14em;
+    text-transform: none;
+    color: #99683b;
+}
+
+body.malayalam .events .section-title {
+    color: #673d1d;
+}
+
+body.malayalam .events .divider {
+    background: linear-gradient(90deg, transparent, rgba(138, 92, 42, 0.85), transparent);
+}
+
+body.malayalam .event-card {
+    background: linear-gradient(180deg, rgba(255, 249, 238, 0.96), rgba(246, 235, 216, 0.97));
+    border: 1px solid rgba(138, 92, 42, 0.2);
+    border-radius: 24px 24px 10px 10px;
+    box-shadow: 0 18px 46px rgba(88, 58, 28, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.68);
+}
+
+body.malayalam .event-card::before {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #b27a3d 50%, transparent);
+}
+
+body.malayalam .event-card::after {
+    inset: 14px;
+    width: auto;
+    height: auto;
+    border-radius: 18px;
+    border: 1px solid rgba(165, 117, 67, 0.12);
+    background: none;
+    opacity: 0.58;
+}
+
+body.malayalam .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 54px rgba(88, 58, 28, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+body.malayalam .event-card-badge {
+    background: rgba(138, 92, 42, 0.1);
+    border: 1px solid rgba(138, 92, 42, 0.18);
+    color: #7b4a21;
+}
+
+body.malayalam .event-icon {
+    background: linear-gradient(135deg, #8c5b2c, #b98449);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+body.malayalam .event-card h3 {
+    color: #5a3515;
+}
+
+body.malayalam .event-ornament {
+    color: #b6824b;
+    opacity: 0.78;
+}
+
+body.malayalam .event-date-chip {
+    background: rgba(255, 255, 255, 0.74);
+    color: #6a4320;
+    border: 1px solid rgba(165, 117, 67, 0.22);
+    box-shadow: none;
+}
+
+body.malayalam .event-date-chip i {
+    color: #a8733e;
+}
+
+body.malayalam .event-details {
+    border-top: 1px solid rgba(138, 92, 42, 0.14);
+    border-bottom: 1px solid rgba(138, 92, 42, 0.14);
+}
+
+body.malayalam .event-detail-row {
+    color: #5b4022;
+}
+
+body.malayalam .detail-icon {
+    background: rgba(165, 117, 67, 0.1);
+    color: #8a5a2b;
+}
+
+body.malayalam .event-card .outline-btn {
+    color: #6b451f;
+    border-color: rgba(138, 92, 42, 0.32);
+    background: rgba(255, 255, 255, 0.42);
+}
+
+body.malayalam .event-card .outline-btn:hover {
+    background: #8a5a2b;
+    border-color: #8a5a2b;
+    color: #fff;
+}
+
+body.malayalam footer {
+    background: linear-gradient(180deg, #4d2d1d 0%, #2d1c14 100%);
+    position: relative;
+}
+
+body.malayalam footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(242, 221, 186, 0.8), transparent);
+}
+
+body.malayalam footer p {
+    color: #f3e9d6;
+}
+
+body.malayalam .copyright {
+    color: rgba(243, 233, 214, 0.72);
 }
 
 /* --- Events Section --- */

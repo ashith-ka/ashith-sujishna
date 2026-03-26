@@ -3,6 +3,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 0. Cover / Opening Animation ---
     const cover = document.getElementById('cover');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMalayalam = document.documentElement.lang === 'ml' || document.body.classList.contains('malayalam');
+    const pageCopy = isMalayalam ? {
+        dataSaverNotice: 'ഡാറ്റ സംരക്ഷിക്കാൻ വീഡിയോ നിർത്തിയിരിക്കുന്നു',
+        countdownDone: 'ഇന്ന് ഞങ്ങളുടെ വിവാഹദിനമാണ്!',
+        countdownFont: "var(--font-ml-display)",
+        calendarTitle: 'അഷിത്ത് & സുജിഷ്‌ണ വിവാഹം',
+        calendarDetails: 'ഞങ്ങളുടെ വിവാഹത്തിൽ പങ്കുചേരാൻ സ്നേഹപൂർവ്വം സ്വാഗതം.\n\nവിവാഹച്ചടങ്ങ്: രാവിലെ 9:45 - 10:30, SHA International Auditorium, ചേറ്റുവ\nസ്‌നേഹവിരുന്ന്: വൈകിട്ട് 4:00 - 7:00, Jubilee Convention Centre, കാട്ടൂർ',
+        calendarLocation: 'SHA International Auditorium, Chettuva, Kerala',
+        shareTitle: 'അഷിത്ത് & സുജിഷ്‌ണ വിവാഹം',
+        shareText: '2026 മെയ് 3-ന് നടക്കുന്ന ഞങ്ങളുടെ വിവാഹച്ചടങ്ങിലും സ്‌നേഹവിരുന്നിലും സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു.',
+        copiedText: 'ലിങ്ക് കോപ്പിയായി!'
+    } : {
+        dataSaverNotice: 'Video paused to save data on your connection',
+        countdownDone: "It's Our Wedding Day!",
+        countdownFont: "var(--font-heading)",
+        calendarTitle: "Ashith & Sujishna's Wedding",
+        calendarDetails: 'Join us to celebrate our wedding!\n\nWedding Ceremony: 9:45 AM - 10:30 AM at SHA International Auditorium, Chettuva\nReception: 4:00 PM - 7:00 PM at Jubilee Convention Centre, Kattoor',
+        calendarLocation: 'SHA International Auditorium, Chettuva, Kerala',
+        shareTitle: "Ashith & Sujishna's Wedding",
+        shareText: 'Join us in celebrating the wedding of Ashith and Sujishna on May 3rd, 2026.',
+        copiedText: 'Copied!'
+    };
     
     if (cover) {
         let isCoverOpening = false;
@@ -69,9 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return ['slow-2g', '2g', '3g'].includes(conn.effectiveType);
     }
 
-    if (isSlowConnection()) {
+    if (heroVideo && isSlowConnection()) {
         // Remove the video to avoid downloading a large file
-        if (heroVideo) heroVideo.remove();
+        heroVideo.remove();
 
         // Apply a romantic gradient fallback to the video container
         if (videoContainer) {
@@ -86,10 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'position:fixed', 'bottom:70px', 'left:50%', 'transform:translateX(-50%)',
             'background:rgba(0,0,0,0.65)', 'color:#e8c7d0', 'font-size:11px',
             'padding:6px 14px', 'border-radius:20px', 'z-index:9999',
-            'font-family:sans-serif', 'pointer-events:none', 'white-space:nowrap',
+            `font-family:${isMalayalam ? "'Manjari', sans-serif" : "sans-serif"}`, 'pointer-events:none', 'white-space:nowrap',
             'backdrop-filter:blur(4px)'
         ].join(';');
-        notice.textContent = '📶 Video paused to save data on your connection';
+        notice.textContent = `📶 ${pageCopy.dataSaverNotice}`;
         document.body.appendChild(notice);
         setTimeout(() => notice.remove(), 5000); // Auto-dismiss after 5s
     }
@@ -142,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(countdownFunction);
-            document.querySelector(".countdown-container").innerHTML = "<h2 style='font-family: var(--font-heading); color: var(--primary-light); font-size: 2rem'>It's Our Wedding Day!</h2>";
+            document.querySelector(".countdown-container").innerHTML = `<h2 style="font-family: ${pageCopy.countdownFont}; color: var(--primary-light); font-size: 2rem">${pageCopy.countdownDone}</h2>`;
         }
     }, 1000);
 
@@ -207,21 +229,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 5. Add to Calendar Logic ---
     const addToCalendarBtn = document.getElementById('add-to-calendar');
-    addToCalendarBtn.addEventListener('click', () => {
-        // Google Calendar Format
-        const title = encodeURIComponent("Ashith & Sujishna's Wedding");
-        const details = encodeURIComponent("Join us to celebrate our wedding!\n\nWedding Ceremony: 9:45 AM - 10:30 AM at SHA International Auditorium, Chettuva\nReception: 4:00 PM - 7:00 PM at Jubilee Convention Centre, Kattoor");
-        const location = encodeURIComponent("SHA International Auditorium, Chettuva, Kerala");
+    if (addToCalendarBtn) {
+        addToCalendarBtn.addEventListener('click', () => {
+            // Google Calendar Format
+            const title = encodeURIComponent(pageCopy.calendarTitle);
+            const details = encodeURIComponent(pageCopy.calendarDetails);
+            const location = encodeURIComponent(pageCopy.calendarLocation);
 
-        // Dates must be in format YYYYMMDDTHHmmssZ (UTC time) or just YYYYMMDD/YYYYMMDD for whole day
-        // The calendar event spans the full wedding day itinerary in IST.
-        const startTime = "20260503T041500Z"; // 9:45 AM IST
-        const endTime = "20260503T133000Z";   // 7:00 PM IST
+            // The calendar event spans the full wedding day itinerary in IST.
+            const startTime = "20260503T041500Z"; // 9:45 AM IST
+            const endTime = "20260503T133000Z";   // 7:00 PM IST
 
-        const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
+            const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
 
-        window.open(googleCalUrl, '_blank');
-    });
+            window.open(googleCalUrl, '_blank');
+        });
+    }
 
     // --- 5. Share Invitation Logic ---
     const shareBtn = document.getElementById('share-website');
@@ -230,8 +253,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (navigator.share) {
                 try {
                     await navigator.share({
-                        title: "Ashith & Sujishna's Wedding",
-                        text: "Join us in celebrating the wedding of Ashith and Sujishna on May 3rd, 2026.",
+                        title: pageCopy.shareTitle,
+                        text: pageCopy.shareText,
                         url: window.location.href
                     });
                 } catch (err) {
@@ -244,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     await navigator.clipboard.writeText(window.location.href);
                     const originalText = shareBtn.innerHTML;
-                    shareBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    shareBtn.innerHTML = `<i class="fas fa-check"></i> ${pageCopy.copiedText}`;
                     setTimeout(() => { shareBtn.innerHTML = originalText; }, 2000);
                 } catch (err) {
                     console.error('Failed to copy: ', err);
