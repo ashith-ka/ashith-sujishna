@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="cinematic-page">
 
     <!-- Opening Cover -->
     <div class="cover" id="cover">
@@ -50,6 +50,13 @@
                 <div class="envelope-body">
                     <div class="letter-card" aria-hidden="true"></div>
                     <div class="envelope-text">
+                        <div class="site-crest site-crest--cover" aria-hidden="true">
+                            <span class="site-crest__line"></span>
+                            <span class="site-crest__medallion">
+                                <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                            </span>
+                            <span class="site-crest__line"></span>
+                        </div>
                         <p class="cover-tap">Tap to Open</p>
                     </div>
                 </div>
@@ -241,24 +248,54 @@
 
             <div class="gallery-grid">
                 <!-- Placeholder image URLs from Unsplash (wedding theme) -->
-                <div class="gallery-item"><img
-                        src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 1" loading="lazy"></div>
-                <div class="gallery-item"><img
-                        src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 2" loading="lazy"></div>
-                <div class="gallery-item"><img
-                        src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 3" loading="lazy"></div>
-                <div class="gallery-item"><img
-                        src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 4" loading="lazy"></div>
-                <div class="gallery-item mobile-hidden"><img
-                        src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 5" loading="lazy"></div>
-                <div class="gallery-item mobile-hidden"><img
-                        src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 6" loading="lazy"></div>
+                <div class="gallery-item gallery-item--featured">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=900"
+                        alt="Wedding Photo 1" loading="lazy">
+                    <div class="gallery-frame-copy">
+                        <span class="gallery-frame-tag">Lead Frame</span>
+                        <p class="gallery-frame-title">The First Light of Our Day</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 2" loading="lazy">
+                    <div class="gallery-frame-copy">
+                        <span class="gallery-frame-tag">Portrait</span>
+                        <p class="gallery-frame-title">Quiet joy before the vows</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 3" loading="lazy">
+                    <div class="gallery-frame-copy">
+                        <span class="gallery-frame-tag">Ceremony</span>
+                        <p class="gallery-frame-title">Moments caught in golden air</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 4" loading="lazy">
+                    <div class="gallery-frame-copy">
+                        <span class="gallery-frame-tag">Evening</span>
+                        <p class="gallery-frame-title">A celebration gathering its glow</p>
+                    </div>
+                </div>
+                <div class="gallery-item mobile-hidden">
+                    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 5" loading="lazy">
+                    <div class="gallery-frame-copy">
+                        <span class="gallery-frame-tag">Details</span>
+                        <p class="gallery-frame-title">Little textures of the day</p>
+                    </div>
+                </div>
+                <div class="gallery-item mobile-hidden">
+                    <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=600"
+                        alt="Wedding Photo 6" loading="lazy">
+                    <div class="gallery-frame-copy">
+                        <span class="gallery-frame-tag">Afterglow</span>
+                        <p class="gallery-frame-title">The warmth that lingers after</p>
+                    </div>
+                </div>
             </div>
 
             <div class="gallery-actions">
@@ -271,6 +308,13 @@
     <!-- Footer -->
     <footer>
         <div class="container">
+            <div class="site-crest site-crest--footer" aria-hidden="true">
+                <span class="site-crest__line"></span>
+                <span class="site-crest__medallion">
+                    <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                </span>
+                <span class="site-crest__line"></span>
+            </div>
             <h2 class="footer-names">Ashith & Sujishna</h2>
             <p>Be with us as this new chapter begins.</p>
             <p class="copyright">&copy; 2026 Ashith & Sujishna. Made with love.</p>
@@ -282,6 +326,14 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <div class="qr-header">
+                <div class="site-crest site-crest--modal" aria-hidden="true">
+                    <span class="site-crest__line"></span>
+                    <span class="site-crest__medallion">
+                        <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                    </span>
+                    <span class="site-crest__line"></span>
+                </div>
+                <p class="modal-kicker">Travel Companion</p>
                 <i class="fas fa-mobile-alt"></i>
                 <h3>Scan for Directions</h3>
                 <p>Heading out? Scan this on your phone to open navigation.</p>

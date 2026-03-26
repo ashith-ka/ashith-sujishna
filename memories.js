@@ -53,6 +53,78 @@ document.addEventListener('DOMContentLoaded', () => {
     let modelsLoaded = false;
     let modelsPromise = null;
     let selectedFiles = [];
+    const SITE_CREST_MARKUP = `
+        <div class="site-crest site-crest--memory" aria-hidden="true">
+            <span class="site-crest__line"></span>
+            <span class="site-crest__medallion">
+                <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+            </span>
+            <span class="site-crest__line"></span>
+        </div>`;
+
+    /**
+     * Escapes user-facing text before injecting it into HTML markup.
+     * @param {string} value - Raw text value
+     * @returns {string}
+     */
+    function escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * Formats a created_at timestamp for the gallery overlay.
+     * @param {string|null} value - Photo timestamp
+     * @returns {string}
+     */
+    function formatMemoryStamp(value) {
+        if (!value) return 'Captured recently';
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return 'Captured recently';
+
+        const dateLabel = date.toLocaleDateString('en-US', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+        const timeLabel = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit'
+        });
+
+        return `${dateLabel} at ${timeLabel}`;
+    }
+
+    /**
+     * Builds a premium gallery state card.
+     * @param {Object} options - State text and optional action
+     * @param {string} options.eyebrow - Small heading text
+     * @param {string} options.title - Main state title
+     * @param {string} options.copy - Supporting copy
+     * @param {string} [options.actionId] - Optional action button id
+     * @param {string} [options.actionLabel] - Optional action button label
+     * @returns {string}
+     */
+    function createGalleryStateMarkup({ eyebrow, title, copy, actionId, actionLabel }) {
+        const actionMarkup = actionId && actionLabel
+            ? `<button id="${escapeHtml(actionId)}" class="outline-btn">${escapeHtml(actionLabel)}</button>`
+            : '';
+
+        return `
+            <div class="gallery-state">
+                ${SITE_CREST_MARKUP}
+                <p class="gallery-state__eyebrow">${escapeHtml(eyebrow)}</p>
+                <h2 class="gallery-state__title">${escapeHtml(title)}</h2>
+                <p class="gallery-state__copy">${escapeHtml(copy)}</p>
+                ${actionMarkup}
+            </div>
+        `;
+    }
 
     // --- MODEL LOADING ---
     /**
@@ -393,12 +465,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (error) {
             console.error('Photo fetch failed:', error);
             if (memoriesGrid) {
-                memoriesGrid.innerHTML = `
-                    <div class="gallery-loader">
-                        <i class="fas fa-exclamation-triangle" style="color: #ff4d4d; font-size: 2rem; margin-bottom: 10px;"></i>
-                        <p>Failed to load photos: ${error.message}</p>
-                        <button id="retry-gallery" class="outline-btn" style="margin-top: 10px;">Try Again</button>
-                    </div>`;
+                memoriesGrid.innerHTML = createGalleryStateMarkup({
+                    eyebrow: 'A pause in the archive',
+                    title: 'We could not load the gallery',
+                    copy: `Failed to load photos: ${error.message}`,
+                    actionId: 'retry-gallery',
+                    actionLabel: 'Try Again'
+                });
 
                 const retryBtn = document.getElementById('retry-gallery');
                 if (retryBtn) {
@@ -667,15 +740,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!memoriesGrid) return;
 
         if (photos.length === 0) {
-            memoriesGrid.innerHTML = '<div class="gallery-loader"><p>No photos found. Be the first to share a memory!</p></div>';
+            memoriesGrid.innerHTML = createGalleryStateMarkup({
+                eyebrow: 'Waiting for the first frame',
+                title: 'No memories yet',
+                copy: 'Be the first to share a beautiful moment from the celebration.'
+            });
             return;
         }
 
-        memoriesGrid.innerHTML = photos.map((photo) => `
-            <div class="gallery-item fade-in">
-                <img src="${photo.url}" alt="Wedding Memory" loading="lazy">
-            </div>
-        `).join('');
+        memoriesGrid.innerHTML = photos.map((photo, index) => {
+            const labelNumber = String(index + 1).padStart(2, '0');
+            const tagLabel = Number.isFinite(photo.distance)
+                ? 'Matched Portrait'
+                : (index === 0 ? 'Latest Frame' : 'Guest Memory');
+            const titleLabel = Number.isFinite(photo.distance)
+                ? `Found Memory ${labelNumber}`
+                : `Captured Moment ${labelNumber}`;
+            const stamp = formatMemoryStamp(photo.created_at);
+
+            return `
+                <article class="gallery-item fade-in">
+                    <img src="${escapeHtml(photo.url)}" alt="${escapeHtml(titleLabel)}" loading="lazy">
+                    <div class="gallery-item__meta">
+                        <span class="gallery-item__tag">${escapeHtml(tagLabel)}</span>
+                        <p class="gallery-item__title">${escapeHtml(titleLabel)}</p>
+                        <p class="gallery-item__stamp">${escapeHtml(stamp)}</p>
+                    </div>
+                </article>
+            `;
+        }).join('');
 
         setTimeout(() => {
             const items = memoriesGrid.querySelectorAll('.gallery-item');

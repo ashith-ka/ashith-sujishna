@@ -2590,3 +2590,507 @@ a,
     .heart:nth-child(6) { left: 88%; top: 66%; }
     .heart:nth-child(7) { left: 12%; top: 44%; }
 }
+
+/* ============================================================
+   Editorial Luxury Uplift
+   Shared identity, page-level art direction, and premium polish
+   ============================================================ */
+
+body.cinematic-page {
+    --page-accent: #d6b276;
+    --page-accent-strong: #f4dfb6;
+    --page-surface: #140f0d;
+    --page-surface-soft: #221916;
+    --page-panel: rgba(28, 20, 17, 0.86);
+    --page-border: rgba(214, 178, 118, 0.22);
+    --page-shadow: 0 26px 80px rgba(0, 0, 0, 0.45);
+    --divider-badge-bg: rgba(20, 15, 13, 0.94);
+    --section-space: clamp(3.9rem, 10vw, 7rem);
+}
+
+body.ceremonial-page {
+    --page-accent: #986336;
+    --page-accent-strong: #b77e49;
+    --page-surface: #f7efe2;
+    --page-surface-soft: #efe0ca;
+    --page-panel: rgba(249, 241, 230, 0.94);
+    --page-border: rgba(152, 99, 54, 0.22);
+    --page-shadow: 0 24px 60px rgba(93, 60, 36, 0.16);
+    --divider-badge-bg: rgba(247, 239, 226, 0.98);
+    --section-space: clamp(3.5rem, 9vw, 6.2rem);
+}
+
+body.afterglow-page {
+    --page-accent: #d6b276;
+    --page-accent-strong: #f4dfb6;
+    --page-surface: #120d0c;
+    --page-surface-soft: #1f1816;
+    --page-panel: rgba(27, 20, 18, 0.92);
+    --page-border: rgba(214, 178, 118, 0.18);
+    --page-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+    --divider-badge-bg: rgba(18, 13, 12, 0.96);
+    --section-space: clamp(3.5rem, 8vw, 5.5rem);
+}
+
+body.cinematic-page,
+body.ceremonial-page,
+body.afterglow-page {
+    --site-radius: 24px;
+    --site-radius-lg: 32px;
+}
+
+body.cinematic-page section,
+body.ceremonial-page section {
+    padding: var(--section-space) 0;
+}
+
+.site-crest {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    color: var(--page-accent, var(--primary-light));
+    line-height: 1;
+}
+
+.site-crest__line {
+    width: clamp(2rem, 10vw, 3.2rem);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    opacity: 0.45;
+}
+
+.site-crest__medallion {
+    position: relative;
+    width: clamp(3rem, 13vw, 4.25rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.14), transparent 45%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow:
+        inset 0 0 0 1px rgba(214, 178, 118, 0.18),
+        0 10px 24px rgba(0, 0, 0, 0.15);
+}
+
+.site-crest__medallion::before,
+.site-crest__medallion::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    border: 1px solid rgba(214, 178, 118, 0.24);
+}
+
+.site-crest__medallion::after {
+    inset: 11px;
+    opacity: 0.55;
+}
+
+.site-crest__monogram {
+    font-family: var(--font-heading);
+    font-size: clamp(0.78rem, 3vw, 1.05rem);
+    letter-spacing: 0.3em;
+    padding-left: 0.3em;
+    color: currentColor;
+    text-transform: uppercase;
+}
+
+.site-crest__monogram span {
+    font-size: 0.8em;
+    letter-spacing: 0;
+    opacity: 0.8;
+}
+
+.site-crest--cover {
+    position: absolute;
+    top: 1.55rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 3.2rem);
+    color: rgba(138, 108, 66, 0.78);
+}
+
+.site-crest--footer,
+.site-crest--modal,
+.site-crest--header,
+.site-crest--memory {
+    margin-bottom: 1rem;
+}
+
+.modal-kicker {
+    margin-bottom: 0.65rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--page-accent, var(--primary-color));
+}
+
+body.malayalam .modal-kicker {
+    font-family: 'Manjari', sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: none;
+}
+
+.cinematic-page .divider,
+.ceremonial-page .divider {
+    position: relative;
+    width: min(180px, 62vw);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--page-accent), transparent);
+    margin: 0 auto 42px;
+}
+
+.cinematic-page .divider::before,
+.ceremonial-page .divider::before {
+    content: 'A & S';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0 0.95rem;
+    background: var(--divider-badge-bg);
+    color: var(--page-accent-strong, var(--page-accent));
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    letter-spacing: 0.34em;
+    white-space: nowrap;
+}
+
+.cinematic-page .hero {
+    background:
+        radial-gradient(circle at top, rgba(255, 232, 182, 0.08), transparent 34%),
+        linear-gradient(180deg, rgba(8, 6, 5, 0.12), rgba(8, 6, 5, 0.42));
+}
+
+.cinematic-page .hero-overlay {
+    background:
+        radial-gradient(circle at 50% 28%, rgba(255, 236, 195, 0.16), transparent 34%),
+        linear-gradient(180deg, rgba(7, 5, 5, 0.18) 0%, rgba(7, 5, 5, 0.4) 50%, rgba(7, 5, 5, 0.75) 100%);
+}
+
+.cinematic-page .hero-content {
+    max-width: 780px;
+    text-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.cinematic-page .subtitle {
+    color: rgba(255, 236, 205, 0.8);
+}
+
+.cinematic-page .invitation-note {
+    position: relative;
+    background:
+        radial-gradient(circle at 20% 15%, rgba(255, 230, 176, 0.08), transparent 28%),
+        linear-gradient(180deg, #140f0d 0%, #1b1513 100%);
+}
+
+.cinematic-page .invitation-note .container {
+    max-width: 860px;
+    padding: clamp(1.7rem, 5vw, 3rem);
+    border-radius: var(--site-radius-lg);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02)),
+        rgba(26, 19, 17, 0.68);
+    border: 1px solid var(--page-border);
+    box-shadow: var(--page-shadow);
+    backdrop-filter: blur(10px);
+}
+
+.cinematic-page .invitation-kicker,
+.cinematic-page .gallery-kicker {
+    color: var(--page-accent);
+}
+
+.cinematic-page .invitation-text,
+.cinematic-page .signature-names {
+    color: #f3e7cf;
+}
+
+.cinematic-page .signature-names:first-child {
+    color: rgba(243, 231, 207, 0.7);
+}
+
+.cinematic-page .events {
+    background:
+        radial-gradient(circle at top left, rgba(255, 226, 171, 0.08), transparent 28%),
+        linear-gradient(160deg, #120d0c 0%, #1d1513 48%, #110d0c 100%);
+}
+
+.cinematic-page .gallery {
+    position: relative;
+    background:
+        radial-gradient(circle at 80% 8%, rgba(255, 225, 165, 0.1), transparent 25%),
+        linear-gradient(180deg, #18110f 0%, #110d0c 100%);
+}
+
+.cinematic-page .gallery .section-title,
+.cinematic-page .gallery-sub {
+    color: #f1e7d4;
+}
+
+.cinematic-page .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+.cinematic-page .gallery-item {
+    aspect-ratio: 0.92;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+}
+
+.cinematic-page .gallery-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(8, 7, 6, 0.08), rgba(8, 7, 6, 0.02) 35%, rgba(8, 7, 6, 0.7) 100%);
+    z-index: 1;
+    transition: opacity 0.45s ease;
+}
+
+.cinematic-page .gallery-item:hover::before {
+    opacity: 0.82;
+}
+
+.gallery-frame-copy {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 2;
+    color: #fff6e8;
+}
+
+.gallery-frame-tag {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 0.45rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(10, 8, 7, 0.55);
+    border: 1px solid rgba(244, 223, 182, 0.2);
+    font-size: 0.67rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.gallery-frame-title {
+    font-family: var(--font-heading);
+    font-size: 1.22rem;
+    line-height: 1.12;
+    text-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+}
+
+.cinematic-page .gallery-item--featured {
+    aspect-ratio: 0.84;
+}
+
+.cinematic-page footer {
+    background:
+        radial-gradient(circle at top, rgba(255, 227, 176, 0.08), transparent 28%),
+        linear-gradient(180deg, #120d0c 0%, #090707 100%);
+}
+
+.cinematic-page .qr-header,
+.ceremonial-page .qr-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cinematic-page .modal-content,
+.ceremonial-page .modal-content {
+    width: min(92vw, 430px);
+    border-radius: var(--site-radius);
+    border: 1px solid var(--page-border);
+    box-shadow: var(--page-shadow);
+}
+
+.cinematic-page .modal-content {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+        rgba(23, 18, 16, 0.94);
+    color: #f3e7cf;
+}
+
+.cinematic-page #qr-label {
+    color: var(--page-accent-strong);
+}
+
+.cinematic-page .footer-names {
+    color: var(--page-accent-strong);
+}
+
+.ceremonial-page {
+    background:
+        radial-gradient(circle at 80% 0%, rgba(198, 146, 92, 0.08), transparent 22%),
+        linear-gradient(180deg, #f8f0e4 0%, #efe2cf 100%);
+}
+
+.ceremonial-page .hero {
+    background:
+        radial-gradient(circle at 50% 12%, rgba(255, 236, 191, 0.1), transparent 24%),
+        linear-gradient(135deg, #2a1812 0%, #4a2c20 44%, #261610 100%);
+}
+
+.ceremonial-page .hero-overlay {
+    background:
+        linear-gradient(180deg, rgba(30, 18, 13, 0.16), rgba(30, 18, 13, 0.7)),
+        radial-gradient(circle at 50% 28%, rgba(255, 228, 187, 0.08), transparent 30%);
+}
+
+.ceremonial-page .invitation-note {
+    position: relative;
+    background:
+        radial-gradient(circle at 18% 14%, rgba(198, 146, 92, 0.09), transparent 24%),
+        linear-gradient(180deg, #f7efe2 0%, #efe1cf 100%);
+}
+
+.ceremonial-page .invitation-note .container {
+    max-width: 860px;
+    padding: clamp(1.5rem, 5vw, 3rem);
+    border-radius: var(--site-radius-lg);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.5)),
+        linear-gradient(180deg, #f7efe0, #f1e2cd);
+    border: 1px solid var(--page-border);
+    box-shadow: var(--page-shadow);
+    position: relative;
+}
+
+.ceremonial-page .invitation-note .container::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(152, 99, 54, 0.15);
+    border-radius: calc(var(--site-radius-lg) - 10px);
+    pointer-events: none;
+}
+
+.ceremonial-page .invitation-text,
+.ceremonial-page .signature-address,
+.ceremonial-page .signature-names {
+    color: #5c3820;
+}
+
+.ceremonial-page .events {
+    background:
+        radial-gradient(circle at top right, rgba(191, 137, 83, 0.1), transparent 22%),
+        linear-gradient(180deg, #efe2cf 0%, #f8f0e4 100%);
+}
+
+.ceremonial-page .events .section-title,
+.ceremonial-page .events-eyebrow {
+    color: #7b4c25;
+}
+
+.ceremonial-page .event-card {
+    border-radius: 26px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.38)),
+        linear-gradient(180deg, #f7edde 0%, #f1e0cb 100%);
+    border: 1px solid rgba(152, 99, 54, 0.18);
+    box-shadow: 0 20px 45px rgba(108, 71, 42, 0.16);
+}
+
+.ceremonial-page .event-card::before {
+    background: linear-gradient(90deg, transparent 0%, #b77e49 35%, #d9b07a 50%, #b77e49 65%, transparent 100%);
+}
+
+.ceremonial-page .event-card h3,
+.ceremonial-page .event-detail-row,
+.ceremonial-page .event-date-chip,
+.ceremonial-page .event-icon,
+.ceremonial-page .event-card-badge {
+    color: #6c4524;
+}
+
+.ceremonial-page .event-icon {
+    -webkit-text-fill-color: currentColor;
+}
+
+.ceremonial-page .event-detail-row {
+    font-family: 'Manjari', sans-serif;
+}
+
+.ceremonial-page footer {
+    background:
+        linear-gradient(180deg, #5b3521 0%, #2e1c14 100%);
+}
+
+.ceremonial-page .footer-names,
+.ceremonial-page footer p {
+    color: #f7ecdb;
+}
+
+.ceremonial-page .modal-content {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.64)),
+        linear-gradient(180deg, #f7edde, #f2e2cd);
+    color: #5c3820;
+}
+
+.ceremonial-page #qr-label {
+    color: #7b4c25;
+}
+
+@media (min-width: 768px) {
+    .cinematic-page .gallery-grid {
+        grid-template-columns: 1.15fr 1fr;
+        gap: 18px;
+    }
+
+    .cinematic-page .gallery-item--featured {
+        grid-row: span 2;
+        min-height: 520px;
+        aspect-ratio: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .site-crest--cover {
+        top: 1.15rem;
+        width: calc(100% - 2.2rem);
+    }
+
+    .site-crest__line {
+        width: 1.7rem;
+    }
+
+    .gallery-frame-copy {
+        left: 0.85rem;
+        right: 0.85rem;
+        bottom: 0.85rem;
+    }
+
+    .gallery-frame-title {
+        font-size: 1.05rem;
+    }
+
+    .cinematic-page .modal-content,
+    .ceremonial-page .modal-content {
+        width: min(94vw, 420px);
+        padding: 2rem 1.4rem;
+    }
+
+    .ceremonial-page .invitation-note .container,
+    .cinematic-page .invitation-note .container {
+        padding: 1.5rem 1.2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cinematic-page .gallery-item img,
+    .cinematic-page .gallery-item::before,
+    .cinematic-page .gallery-frame-copy,
+    .ceremonial-page .event-card,
+    .cinematic-page .invitation-note .container,
+    .ceremonial-page .invitation-note .container {
+        transition: none !important;
+    }
+}

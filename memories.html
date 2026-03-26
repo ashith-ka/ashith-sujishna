@@ -30,10 +30,21 @@
     <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 </head>
 
-<body class="memories-page">
+<body class="memories-page afterglow-page">
     <header class="memories-header">
         <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
-        <h1>Guest Memories</h1>
+        <div class="memories-brand">
+            <div class="site-crest site-crest--header" aria-hidden="true">
+                <span class="site-crest__line"></span>
+                <span class="site-crest__medallion">
+                    <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                </span>
+                <span class="site-crest__line"></span>
+            </div>
+            <p class="memories-eyebrow">Afterglow Archive</p>
+            <h1>Guest Memories</h1>
+            <p class="memories-subtitle">A living gallery of the frames, laughter, and little glances our guests catch.</p>
+        </div>
         <div class="header-actions">
             <button id="find-me-btn" class="outline-btn">
                 <i class="fas fa-search"></i> <span class="btn-label">Find My Photos</span>
@@ -45,6 +56,25 @@
     </header>
 
     <main class="container">
+        <section class="memories-intro fade-in">
+            <div class="memories-intro-card">
+                <div class="site-crest site-crest--memory" aria-hidden="true">
+                    <span class="site-crest__line"></span>
+                    <span class="site-crest__medallion">
+                        <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                    </span>
+                    <span class="site-crest__line"></span>
+                </div>
+                <p class="memories-intro-kicker">Night of Celebration</p>
+                <h2>Keep the afterglow alive.</h2>
+                <p>Upload the moments you captured, or let the gallery gather every frame you appear in.</p>
+                <div class="memories-intro-notes">
+                    <span>Upload multiple photos in one go</span>
+                    <span>Find your photos with a selfie</span>
+                </div>
+            </div>
+        </section>
+
         <!-- Search/Filter Status -->
         <div id="filter-status" class="filter-status hidden">
             <span>Showing photos of you</span>
@@ -54,9 +84,17 @@
         <!-- Gallery Grid -->
         <div id="memories-grid" class="gallery-grid">
             <!-- Photos will be injected here -->
-            <div class="gallery-loader">
+            <div class="gallery-state gallery-state--loading">
+                <div class="site-crest site-crest--memory" aria-hidden="true">
+                    <span class="site-crest__line"></span>
+                    <span class="site-crest__medallion">
+                        <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                    </span>
+                    <span class="site-crest__line"></span>
+                </div>
                 <div class="spinner"></div>
-                <p>Loading memories...</p>
+                <p class="gallery-state__eyebrow">Curating the evening</p>
+                <p class="gallery-state__copy">Loading memories...</p>
             </div>
         </div>
     </main>
@@ -65,6 +103,14 @@
     <div id="upload-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
+            <div class="site-crest site-crest--modal" aria-hidden="true">
+                <span class="site-crest__line"></span>
+                <span class="site-crest__medallion">
+                    <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                </span>
+                <span class="site-crest__line"></span>
+            </div>
+            <p class="modal-kicker">Evening Archive</p>
             <h3>Share a Memory</h3>
             <p>Help us capture the magic of today.</p>
 
@@ -96,6 +142,14 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <div class="face-search-header">
+                <div class="site-crest site-crest--modal" aria-hidden="true">
+                    <span class="site-crest__line"></span>
+                    <span class="site-crest__medallion">
+                        <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                    </span>
+                    <span class="site-crest__line"></span>
+                </div>
+                <p class="modal-kicker">Portrait Match</p>
                 <i class="fas fa-user-secret"></i>
                 <h3>Find Your Photos</h3>
                 <p>Take a selfie or upload a photo of yourself, and we'll find all the memories you're in!</p>
