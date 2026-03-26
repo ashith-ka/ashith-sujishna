@@ -1576,10 +1576,8 @@ body.malayalam .event-card-badge {
 }
 
 body.malayalam .event-icon {
-    background: linear-gradient(135deg, #8c5b2c, #b98449);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #a66d39;
+    filter: drop-shadow(0 8px 18px rgba(140, 91, 44, 0.14));
 }
 
 body.malayalam .event-card h3 {
@@ -1750,12 +1748,29 @@ body.malayalam .copyright {
 }
 
 .event-icon {
-    font-size: 1.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
     margin: 15px 0 8px;
-    background: linear-gradient(135deg, #8a6c42, #d4af6e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #d4af6e;
+    filter: drop-shadow(0 8px 18px rgba(138, 108, 66, 0.18));
+}
+
+.event-icon-svg {
+    width: 2.2rem;
+    height: 2.2rem;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.85;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.event-icon-spark {
+    fill: currentColor;
+    stroke: none;
 }
 
 .event-card h3 {
@@ -2225,8 +2240,14 @@ a,
     }
 
     .event-icon {
-        font-size: 1.8rem;
+        width: 2.8rem;
+        height: 2.8rem;
         margin: 18px 0 12px;
+    }
+
+    .event-icon-svg {
+        width: 2rem;
+        height: 2rem;
     }
 
     .event-card h3 {
