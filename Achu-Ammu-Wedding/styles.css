@@ -1,0 +1,1181 @@
+:root {
+    --blue: #78b8ff;
+    --cloud: #eaf5ff;
+    --gold: #c89032;
+    --soft-gold: #f4d9a1;
+    --ivory: #fff8ed;
+    --ink: #21456d;
+    --rose: #c86a8f;
+    --text: #27415a;
+    --ceremony-glow: 0;
+    --ceremony-shift: 0;
+    --celebration-boost: 0;
+    --reception-progress: 0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 500vh;
+    overflow-x: hidden;
+    font-family: "Manrope", sans-serif;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, #ffffff calc(100% - (var(--ceremony-shift) * 20%)), #fff3dc calc(var(--ceremony-shift) * 20%)) 0%,
+            color-mix(in srgb, #edf7ff calc(100% - (var(--ceremony-shift) * 45%)), #ffe7b6 calc(var(--ceremony-shift) * 45%)) 42%,
+            color-mix(in srgb, #fefcf9 calc(100% - (var(--ceremony-shift) * 60%)), #f3d79e calc(var(--ceremony-shift) * 60%)) 100%
+        );
+    color: var(--text);
+}
+
+.viewport-story {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+
+.story-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    isolation: isolate;
+}
+
+.bg-layer,
+.character,
+.ceremony-scene,
+.reception-scene,
+.ceremony-backdrop,
+.scene-title,
+.scroll-prompt,
+.journey-line,
+.cloud,
+.birds {
+    position: absolute;
+    will-change: transform, opacity;
+}
+
+.bg-layer {
+    inset: 0;
+}
+
+.bg-sky {
+    background:
+        radial-gradient(circle at 18% 20%, color-mix(in srgb, rgba(120, 184, 255, 0.16) calc(100% - (var(--ceremony-shift) * 60%)), rgba(255, 230, 180, 0.22) calc(var(--ceremony-shift) * 60%)), transparent 22%),
+        radial-gradient(circle at 80% 16%, color-mix(in srgb, rgba(162, 205, 255, 0.2) calc(100% - (var(--ceremony-shift) * 70%)), rgba(255, 210, 150, 0.24) calc(var(--ceremony-shift) * 70%)), transparent 24%),
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, #ffffff calc(100% - (var(--ceremony-shift) * 30%)), #fff7ea calc(var(--ceremony-shift) * 30%)) 0%,
+            color-mix(in srgb, #ebf6ff calc(100% - (var(--ceremony-shift) * 80%)), #f9dfac calc(var(--ceremony-shift) * 80%)) 46%,
+            color-mix(in srgb, #d8ebff calc(100% - (var(--ceremony-shift) * 90%)), #eabf78 calc(var(--ceremony-shift) * 90%)) 100%
+        );
+    z-index: 1;
+}
+
+.bg-mountains {
+    inset: auto 0 -6% 0;
+    height: 30%;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, color-mix(in srgb, rgba(181, 214, 243, 0.45) calc(100% - (var(--ceremony-shift) * 100%)), rgba(222, 189, 121, 0.45) calc(var(--ceremony-shift) * 100%)) 100%);
+    clip-path: polygon(0 100%, 0 74%, 12% 58%, 22% 72%, 36% 52%, 48% 72%, 63% 48%, 74% 70%, 87% 57%, 100% 74%, 100% 100%);
+    opacity: calc(0.9 - (var(--ceremony-shift) * 0.55));
+    z-index: 2;
+}
+
+.bg-garden {
+    inset: auto 0 0 0;
+    height: 22%;
+    background:
+        linear-gradient(180deg, rgba(168, 205, 165, 0) 0%, color-mix(in srgb, rgba(181, 218, 173, 0.9) calc(100% - (var(--ceremony-shift) * 100%)), rgba(214, 192, 132, 0.92) calc(var(--ceremony-shift) * 100%)) 100%);
+    clip-path: polygon(0 100%, 0 54%, 14% 46%, 28% 58%, 42% 42%, 57% 60%, 74% 43%, 88% 56%, 100% 46%, 100% 100%);
+    z-index: 3;
+    opacity: calc(1 - (var(--ceremony-shift) * 0.45));
+}
+
+.bg-glow {
+    background:
+        radial-gradient(circle at 50% 36%, color-mix(in srgb, rgba(255, 255, 255, 0.7) calc(100% - (var(--ceremony-shift) * 60%)), rgba(255, 245, 217, 0.88) calc(var(--ceremony-shift) * 60%)) 0%, rgba(255, 255, 255, 0) 24%),
+        radial-gradient(circle at 50% 82%, rgba(255, 211, 161, calc(0.18 + (var(--ceremony-shift) * 0.16))) 0%, transparent 18%),
+        radial-gradient(circle at 50% 74%, rgba(244, 217, 161, calc(0.12 + (var(--ceremony-glow) * 0.28))) 0%, rgba(244, 217, 161, 0) 34%),
+        radial-gradient(circle at 50% 58%, rgba(255, 219, 128, calc(var(--celebration-boost) * 0.24)) 0%, rgba(255, 219, 128, 0) 42%);
+    z-index: 4;
+}
+
+.ceremony-backdrop {
+    inset: 0;
+    opacity: 0;
+    z-index: 6;
+    background:
+        radial-gradient(circle at 50% 18%, rgba(255, 249, 229, 0.98) 0%, rgba(255, 228, 163, 0.58) 22%, rgba(255, 228, 163, 0) 44%),
+        radial-gradient(circle at 50% 62%, rgba(244, 211, 140, 0.22) 0%, rgba(244, 211, 140, 0) 36%),
+        linear-gradient(180deg, rgba(188, 126, 45, 0.04) 0%, rgba(208, 151, 67, 0.18) 26%, rgba(139, 78, 24, 0.36) 100%);
+}
+
+.ceremony-backdrop::before,
+.ceremony-backdrop::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 28vw;
+    height: 72vh;
+    background:
+        linear-gradient(180deg, rgba(180, 128, 58, 0.96) 0%, rgba(138, 82, 28, 0.98) 100%);
+    filter: drop-shadow(0 10px 24px rgba(137, 87, 32, 0.22));
+}
+
+.ceremony-backdrop::before {
+    left: -4vw;
+    clip-path: polygon(0 0, 100% 0, 78% 100%, 0 88%);
+}
+
+.ceremony-backdrop::after {
+    right: -4vw;
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 22% 100%);
+}
+
+.cloud {
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 20% 50%, color-mix(in srgb, rgba(255, 255, 255, 0.98) calc(100% - (var(--ceremony-shift) * 50%)), rgba(255, 245, 224, 0.94) calc(var(--ceremony-shift) * 50%)) 0%, transparent 22%),
+        radial-gradient(circle at 46% 42%, color-mix(in srgb, rgba(255, 255, 255, 0.96) calc(100% - (var(--ceremony-shift) * 50%)), rgba(255, 239, 210, 0.9) calc(var(--ceremony-shift) * 50%)) 0%, transparent 24%),
+        radial-gradient(circle at 72% 55%, color-mix(in srgb, rgba(255, 255, 255, 0.96) calc(100% - (var(--ceremony-shift) * 50%)), rgba(255, 239, 210, 0.9) calc(var(--ceremony-shift) * 50%)) 0%, transparent 22%);
+    filter: blur(6px);
+    z-index: 5;
+    opacity: calc(1 - (var(--ceremony-shift) * 0.65));
+}
+
+.cloud-left {
+    top: 12%;
+    left: 6%;
+    width: 34vw;
+    height: 18vh;
+}
+
+.cloud-right {
+    top: 18%;
+    right: 8%;
+    width: 30vw;
+    height: 16vh;
+}
+
+.birds {
+    inset: 0;
+    pointer-events: none;
+    z-index: 9;
+}
+
+.bird {
+    position: absolute;
+    width: 26px;
+    height: 14px;
+}
+
+.bird::before,
+.bird::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    border-top: 3px solid rgba(35, 70, 108, 0.65);
+    border-radius: 50%;
+}
+
+.bird::before {
+    left: 0;
+    transform: rotate(14deg);
+}
+
+.bird::after {
+    right: 0;
+    transform: rotate(-14deg);
+}
+
+.bird-1 { top: 16%; left: 18%; }
+.bird-2 { top: 13%; left: 56%; }
+.bird-3 { top: 20%; left: 72%; }
+.bird-4 { top: 23%; left: 30%; }
+
+.petals {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.celebration {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 19;
+    opacity: 0;
+}
+
+.celebration::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 50% 35%, rgba(255, 235, 180, calc(var(--celebration-boost) * 0.26)) 0%, rgba(255, 235, 180, 0) 26%),
+        radial-gradient(circle at 24% 24%, rgba(255, 220, 150, calc(var(--celebration-boost) * 0.18)) 0%, rgba(255, 220, 150, 0) 18%),
+        radial-gradient(circle at 76% 24%, rgba(255, 220, 150, calc(var(--celebration-boost) * 0.18)) 0%, rgba(255, 220, 150, 0) 18%);
+}
+
+.petal {
+    position: absolute;
+    width: 12px;
+    height: 8px;
+    border-radius: 12px 12px 12px 2px;
+    background: linear-gradient(135deg, rgba(237, 170, 193, 0.92), rgba(200, 106, 143, 0.45));
+    opacity: 0.55;
+}
+
+.petal.golden {
+    background: linear-gradient(135deg, rgba(255, 232, 166, 0.96), rgba(219, 171, 66, 0.58));
+}
+
+.confetti {
+    position: absolute;
+    top: -8%;
+    width: 12px;
+    height: 16px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #ffe7ae 0%, #d8a73b 100%);
+    box-shadow: 0 0 14px rgba(255, 219, 132, 0.4);
+}
+
+.confetti.round {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.scene-title {
+    top: 10%;
+    left: 50%;
+    width: min(76vw, 860px);
+    text-align: center;
+    transform: translateX(-50%);
+    z-index: 12;
+}
+
+.eyebrow {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.scene-title h1 {
+    margin: 0.9rem 0 1rem;
+    font-family: "Cinzel", serif;
+    font-size: clamp(3rem, 8vw, 6.2rem);
+    line-height: 0.95;
+    color: var(--ink);
+}
+
+.scene-title h1 span {
+    color: var(--rose);
+}
+
+.subtitle {
+    width: min(88%, 700px);
+    margin: 0 auto;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.7;
+    color: rgba(39, 65, 90, 0.9);
+}
+
+.welcome-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.08em;
+    margin-top: 1rem;
+    min-height: 2rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 220ms ease, transform 220ms ease;
+    pointer-events: none;
+}
+
+.welcome-line span {
+    display: inline-block;
+    font-family: "Cinzel", serif;
+    font-size: clamp(1rem, 2.1vw, 1.45rem);
+    font-weight: 700;
+    color: #b97a1f;
+    text-shadow: 0 6px 16px rgba(255, 218, 156, 0.28);
+    opacity: 0;
+    transform: translateY(12px) scale(0.92);
+}
+
+.welcome-line.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.welcome-line.is-visible span {
+    animation: welcomeBounce 0.48s ease forwards;
+}
+
+.welcome-line .welcome-gap {
+    width: 0.7em;
+    opacity: 1;
+    transform: none;
+    animation: none;
+}
+
+.journey-line {
+    display: none;
+}
+
+.journey-dot {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #d5b061;
+    box-shadow: 0 0 14px rgba(213, 176, 97, 0.45);
+    transform: translate(-50%, -50%);
+}
+
+.start-left { left: 0; }
+.start-right { left: 100%; }
+.meet-center { left: 50%; }
+
+.character {
+    width: 280px;
+    text-align: center;
+    z-index: 14;
+    cursor: pointer;
+    overflow: visible;
+    pointer-events: auto;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.return-union {
+    position: absolute;
+    left: 50%;
+    bottom: -8%;
+    width: min(26vw, 300px);
+    height: min(54vh, 460px);
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 15;
+}
+
+.return-union img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(1.02) contrast(1.05) saturate(1.02) drop-shadow(0 16px 24px rgba(30, 58, 90, 0.12));
+}
+
+.character::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 88%;
+    height: 82%;
+    transform: translate(-50%, -42%);
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(255, 255, 255, 0.92) 0%, rgba(244, 250, 255, 0.78) 42%, rgba(244, 250, 255, 0) 78%);
+    filter: blur(18px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.groom {
+    left: 7%;
+    top: 38%;
+}
+
+.bride {
+    right: 7%;
+    top: 38%;
+}
+
+.character-card {
+    position: relative;
+    width: 100%;
+    height: 410px;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: none;
+    z-index: 1;
+}
+
+.character-card img {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center top;
+    filter: brightness(1.02) contrast(1.06) saturate(1.02) drop-shadow(0 16px 24px rgba(30, 58, 90, 0.12));
+}
+
+.character-crop {
+    mix-blend-mode: normal;
+    opacity: 1;
+}
+
+.character-crop-groom {
+    left: 0;
+    top: -1%;
+    clip-path: none;
+}
+
+.character-crop-bride {
+    left: 0;
+    top: 0;
+    clip-path: none;
+}
+
+.character-name {
+    margin-top: 0.8rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(39, 65, 90, 0.68);
+}
+
+.character strong {
+    display: block;
+    margin-top: 0.25rem;
+    font-family: "Cinzel", serif;
+    font-size: 1.4rem;
+    color: var(--ink);
+}
+
+.speech-bubble {
+    position: absolute;
+    top: -104px;
+    min-width: 170px;
+    max-width: 220px;
+    padding: 0.85rem 0.95rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 2px solid rgba(120, 184, 255, 0.24);
+    box-shadow: 0 14px 24px rgba(74, 120, 173, 0.14);
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+    transition: opacity 180ms ease, transform 180ms ease;
+    pointer-events: none;
+    text-align: left;
+    z-index: 18;
+    visibility: hidden;
+}
+
+.character:hover,
+.character.is-speaking,
+.character:focus-within {
+    z-index: 30;
+}
+
+.speech-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    width: 18px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    border-right: 2px solid rgba(120, 184, 255, 0.24);
+    border-bottom: 2px solid rgba(120, 184, 255, 0.24);
+    transform: rotate(45deg);
+}
+
+.speech-bubble strong {
+    display: block;
+    margin: 0 0 0.15rem;
+    font-family: "Cinzel", serif;
+    font-size: 1rem;
+    color: var(--ink);
+}
+
+.speech-bubble span {
+    display: block;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: rgba(39, 65, 90, 0.9);
+}
+
+.speech-bubble-groom {
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.96);
+}
+
+.speech-bubble-groom::after {
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.speech-bubble-bride {
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.96);
+}
+
+.speech-bubble-bride::after {
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.character:hover .speech-bubble,
+.character.is-speaking .speech-bubble,
+.character:focus-within .speech-bubble {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.ceremony-scene {
+    left: 50%;
+    bottom: 2%;
+    width: min(58vw, 820px);
+    height: min(82vh, 820px);
+    transform: translateX(-50%);
+    z-index: 16;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ceremony-scene::before {
+    content: "";
+    position: absolute;
+    inset: 8% 8% 14%;
+    background:
+        radial-gradient(circle, rgba(255, 242, 216, calc(0.34 + (var(--ceremony-glow) * 0.18) + (var(--celebration-boost) * 0.18))) 0%, rgba(255, 232, 187, 0.16) 42%, rgba(255, 232, 187, 0) 72%);
+    filter: blur(24px);
+}
+
+.ceremony-scene::after {
+    content: "";
+    position: absolute;
+    inset: 2% 10% 6%;
+    background:
+        radial-gradient(circle at 50% 58%, rgba(255, 223, 160, calc((var(--ceremony-glow) * 0.18) + (var(--celebration-boost) * 0.1))) 0%, rgba(255, 223, 160, 0) 44%);
+    border-radius: 42px;
+    z-index: 0;
+}
+
+.mandap {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.mandap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 1;
+    filter:
+        sepia(0.14)
+        saturate(1.06)
+        brightness(1.02)
+        contrast(1.03)
+        drop-shadow(0 26px 36px rgba(183, 140, 58, calc(0.18 + (var(--celebration-boost) * 0.16))));
+}
+
+.union-couple {
+    position: absolute;
+    left: 50%;
+    bottom: 19%;
+    width: 34%;
+    height: 46%;
+    transform: translateX(-50%);
+    overflow: hidden;
+    border-radius: 26px;
+    z-index: 2;
+}
+
+.union-couple img {
+    position: absolute;
+    left: 50%;
+    top: 2%;
+    width: 180%;
+    max-width: none;
+    height: 100%;
+    object-fit: contain;
+    transform: translateX(-50%);
+    mix-blend-mode: screen;
+    z-index: 1;
+}
+
+.union-couple::before {
+    content: "";
+    position: absolute;
+    inset: -12% -22% -6%;
+    background:
+        radial-gradient(circle at 50% 46%, rgba(255, 238, 204, 0.22) 0%, rgba(255, 238, 204, 0.1) 18%, rgba(255, 238, 204, 0.04) 36%, rgba(255, 238, 204, 0) 64%);
+    z-index: 0;
+}
+
+.union-glow {
+    position: absolute;
+    left: 50%;
+    bottom: 24%;
+    width: 280px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 218, 160, calc(0.34 + (var(--celebration-boost) * 0.2))) 0%, rgba(255, 218, 160, calc(0.12 + (var(--celebration-boost) * 0.1))) 45%, rgba(255, 218, 160, 0) 76%);
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.wedding-text {
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    width: min(62%, 360px);
+    padding: 0.95rem 1rem;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 247, 229, 0.74), rgba(250, 235, 199, 0.68));
+    border: 1px solid rgba(200, 144, 50, 0.22);
+    box-shadow: 0 14px 28px rgba(200, 144, 50, 0.12);
+    backdrop-filter: blur(4px);
+    text-align: center;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+.wedding-text .eyebrow {
+    color: #aa7a2d;
+}
+
+.wedding-text h2 {
+    margin-top: 0.35rem;
+    font-family: "Cinzel", serif;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    color: #735120;
+}
+
+.wedding-text p {
+    margin-top: 0.22rem;
+    color: rgba(84, 68, 40, 0.86);
+    line-height: 1.35;
+    font-size: 0.98rem;
+}
+
+.reception-scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 17;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 50% 12%, rgba(255, 210, 144, calc(0.16 + (var(--reception-progress) * 0.14))) 0%, rgba(255, 210, 144, 0) 24%),
+        radial-gradient(circle at 50% 78%, rgba(113, 42, 132, calc(0.16 + (var(--reception-progress) * 0.14))) 0%, rgba(113, 42, 132, 0) 36%),
+        linear-gradient(180deg, #251130 0%, #3a1945 42%, #241028 100%);
+}
+
+.reception-scene::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    background:
+        radial-gradient(circle at 14% 24%, rgba(255, 194, 92, 0.34) 0%, rgba(255, 194, 92, 0) 18%),
+        radial-gradient(circle at 82% 22%, rgba(255, 106, 187, 0.3) 0%, rgba(255, 106, 187, 0) 18%),
+        radial-gradient(circle at 30% 74%, rgba(90, 148, 255, 0.28) 0%, rgba(90, 148, 255, 0) 20%),
+        radial-gradient(circle at 74% 76%, rgba(77, 223, 157, 0.26) 0%, rgba(77, 223, 157, 0) 20%),
+        radial-gradient(circle at 52% 42%, rgba(255, 235, 169, 0.22) 0%, rgba(255, 235, 169, 0) 24%);
+    mix-blend-mode: screen;
+    transition: opacity 220ms ease;
+}
+
+.reception-scene::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    background:
+        linear-gradient(180deg, rgba(255, 244, 214, 0.04), rgba(255, 244, 214, 0.08)),
+        radial-gradient(circle at 50% 50%, rgba(255, 230, 176, 0.14) 0%, rgba(255, 230, 176, 0) 34%);
+    transition: opacity 220ms ease;
+}
+
+.reception-scene:hover::before,
+.reception-scene:hover::after,
+.reception-scene.is-lit::before,
+.reception-scene.is-lit::after {
+    opacity: 1;
+}
+
+.reception-scene:hover::before,
+.reception-scene.is-lit::before {
+    animation: receptionGlowShift 4.2s linear infinite;
+}
+
+.reception-backdrop {
+    position: absolute;
+    inset: 0;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: inset 0 -80px 120px rgba(12, 3, 18, 0.42);
+}
+
+.reception-backdrop img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.12) brightness(0.62) contrast(1.08) hue-rotate(12deg);
+    transform: scale(1.04);
+}
+
+.reception-backdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(35, 9, 44, 0.3), rgba(76, 22, 76, 0.22) 34%, rgba(19, 6, 27, 0.5) 100%),
+        radial-gradient(circle at 50% 18%, rgba(255, 214, 147, 0.24) 0%, rgba(255, 214, 147, 0) 22%),
+        radial-gradient(circle at 50% 74%, rgba(245, 112, 160, 0.14) 0%, rgba(245, 112, 160, 0) 32%);
+}
+
+.reception-backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 16% 20%, rgba(255, 199, 117, 0.2) 0%, rgba(255, 199, 117, 0) 20%),
+        radial-gradient(circle at 84% 18%, rgba(255, 124, 192, 0.18) 0%, rgba(255, 124, 192, 0) 20%),
+        linear-gradient(180deg, rgba(18, 6, 24, 0.14), rgba(18, 6, 24, 0.08) 50%, rgba(18, 6, 24, 0.24) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.reception-couple {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: min(32vw, 380px);
+    height: min(62vh, 520px);
+    transform: translateX(-50%);
+    z-index: 4;
+}
+
+.reception-couple::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 2%;
+    width: 138%;
+    height: 28%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(255, 209, 144, 0.28) 0%, rgba(255, 209, 144, 0.14) 34%, rgba(255, 209, 144, 0) 72%);
+    filter: blur(16px);
+    z-index: 0;
+}
+
+.reception-couple::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -1%;
+    width: 92%;
+    height: 10%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(22, 7, 30, 0.54) 0%, rgba(22, 7, 30, 0.22) 42%, rgba(22, 7, 30, 0) 76%);
+    filter: blur(9px);
+    z-index: 0;
+}
+
+.reception-couple img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter:
+        saturate(1.08)
+        brightness(1.03)
+        drop-shadow(0 22px 24px rgba(19, 8, 31, 0.34))
+        drop-shadow(0 0 28px rgba(255, 216, 162, 0.2));
+    z-index: 1;
+}
+
+.reception-lights {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.light-orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 245, 209, 0.98) 0%, rgba(255, 205, 110, 0.56) 34%, rgba(255, 205, 110, 0) 72%);
+    box-shadow: 0 0 34px rgba(255, 219, 132, 0.34);
+    animation: blinkGlow 2.8s ease-in-out infinite;
+}
+
+.orb-1 { top: 16%; left: 12%; width: 140px; height: 140px; animation-delay: 0s; }
+.orb-2 { top: 12%; right: 14%; width: 180px; height: 180px; animation-delay: 0.8s; }
+.orb-3 { bottom: 30%; left: 22%; width: 120px; height: 120px; animation-delay: 1.2s; }
+.orb-4 { bottom: 28%; right: 20%; width: 150px; height: 150px; animation-delay: 1.8s; }
+
+.reception-scene:hover .orb-1,
+.reception-scene.is-lit .orb-1 {
+    background: radial-gradient(circle, rgba(255, 228, 177, 0.98) 0%, rgba(255, 170, 82, 0.62) 34%, rgba(255, 170, 82, 0) 72%);
+}
+
+.reception-scene:hover .orb-2,
+.reception-scene.is-lit .orb-2 {
+    background: radial-gradient(circle, rgba(255, 216, 241, 0.98) 0%, rgba(242, 96, 194, 0.56) 34%, rgba(242, 96, 194, 0) 72%);
+}
+
+.reception-scene:hover .orb-3,
+.reception-scene.is-lit .orb-3 {
+    background: radial-gradient(circle, rgba(224, 233, 255, 0.98) 0%, rgba(123, 143, 255, 0.56) 34%, rgba(123, 143, 255, 0) 72%);
+}
+
+.reception-scene:hover .orb-4,
+.reception-scene.is-lit .orb-4 {
+    background: radial-gradient(circle, rgba(220, 255, 225, 0.98) 0%, rgba(72, 214, 137, 0.54) 34%, rgba(72, 214, 137, 0) 72%);
+}
+
+.reception-hangings {
+    position: absolute;
+    left: 8%;
+    top: 10%;
+    width: min(32vw, 320px);
+    display: grid;
+    gap: 1rem;
+    z-index: 5;
+}
+
+.hanging-card {
+    position: relative;
+    padding: 1rem 1.05rem;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(96, 42, 108, 0.82), rgba(56, 24, 74, 0.9));
+    border: 1px solid rgba(255, 216, 150, 0.24);
+    box-shadow: 0 18px 32px rgba(22, 8, 31, 0.3);
+    text-align: left;
+    backdrop-filter: blur(4px);
+    transform-origin: top center;
+}
+
+.hanging-card::before,
+.hanging-card::after {
+    content: "";
+    position: absolute;
+    top: -74px;
+    width: 2px;
+    height: 74px;
+    background: linear-gradient(180deg, rgba(255, 233, 182, 0.08), rgba(255, 220, 145, 0.9));
+}
+
+.hanging-card::before {
+    left: 20%;
+}
+
+.hanging-card::after {
+    right: 20%;
+}
+
+.hanging-card-date {
+    animation: hangingSwaySmall 5.2s ease-in-out infinite;
+}
+
+.hanging-card-place {
+    margin-left: 1.6rem;
+    animation: hangingSwaySmall 6.1s ease-in-out infinite 0.6s;
+}
+
+.hanging-card .eyebrow {
+    color: #ffdb99;
+}
+
+.hanging-card h3 {
+    margin-top: 0.35rem;
+    font-family: "Cinzel", serif;
+    font-size: clamp(1rem, 1.6vw, 1.35rem);
+    color: #fff5df;
+    line-height: 1.25;
+}
+
+.hanging-card p {
+    margin-top: 0.26rem;
+    color: rgba(255, 242, 225, 0.88);
+    line-height: 1.45;
+    font-size: 0.96rem;
+}
+
+@keyframes blinkGlow {
+    0%, 100% {
+        opacity: 0.36;
+        transform: scale(0.88);
+        box-shadow: 0 0 24px rgba(255, 219, 132, 0.18);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.08);
+        box-shadow: 0 0 44px rgba(255, 219, 132, 0.42);
+    }
+}
+
+@keyframes welcomeBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.88);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateY(-7px) scale(1.06);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes receptionGlowShift {
+    0% {
+        transform: scale(1) translate3d(0, 0, 0);
+        filter: hue-rotate(0deg) saturate(1);
+    }
+
+    25% {
+        transform: scale(1.04) translate3d(0.8%, -0.8%, 0);
+        filter: hue-rotate(30deg) saturate(1.08);
+    }
+
+    50% {
+        transform: scale(1.06) translate3d(-0.6%, 0.8%, 0);
+        filter: hue-rotate(68deg) saturate(1.15);
+    }
+
+    75% {
+        transform: scale(1.03) translate3d(0.7%, 0.4%, 0);
+        filter: hue-rotate(118deg) saturate(1.1);
+    }
+
+    100% {
+        transform: scale(1) translate3d(0, 0, 0);
+        filter: hue-rotate(180deg) saturate(1);
+    }
+}
+
+@keyframes hangingSwaySmall {
+    0%, 100% {
+        transform: rotate(-1.4deg);
+    }
+
+    50% {
+        transform: rotate(1.4deg);
+    }
+}
+
+.scroll-prompt {
+    left: 50%;
+    bottom: 4vh;
+    padding: 0.9rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid rgba(122, 178, 255, 0.26);
+    background: rgba(255, 255, 255, 0.82);
+    transform: translateX(-50%);
+    z-index: 18;
+    font-size: 0.84rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+.scroll-track section {
+    height: 100vh;
+}
+
+@media (max-width: 980px) {
+    .ceremony-scene {
+        width: min(72vw, 700px);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        min-height: 520vh;
+    }
+
+    .scene-title {
+        top: 7%;
+        width: min(92vw, 620px);
+    }
+
+    .character {
+        width: 210px;
+    }
+
+    .return-union {
+        width: min(34vw, 250px);
+        height: min(44vh, 340px);
+    }
+
+    .character-card {
+        height: 310px;
+    }
+
+    .groom {
+        left: -2%;
+        top: 46%;
+    }
+
+    .bride {
+        right: -2%;
+        top: 46%;
+    }
+
+    .ceremony-scene {
+        width: min(86vw, 620px);
+        height: min(70vh, 620px);
+    }
+
+    .ceremony-backdrop::before,
+    .ceremony-backdrop::after {
+        width: 34vw;
+    }
+
+    .union-couple {
+        width: 40%;
+        height: 40%;
+        bottom: 24%;
+    }
+
+    .wedding-text {
+        width: min(74%, 340px);
+        bottom: 5%;
+        padding: 0.8rem 0.9rem;
+    }
+
+    .speech-bubble {
+        top: -76px;
+        min-width: 150px;
+        max-width: 180px;
+    }
+
+    .reception-backdrop {
+        inset: 0;
+    }
+
+    .reception-couple {
+        width: min(42vw, 300px);
+        height: min(48vh, 380px);
+    }
+
+    .reception-hangings {
+        left: 6%;
+        top: 10%;
+        width: min(58vw, 300px);
+    }
+
+    .hanging-card-place {
+        margin-left: 0.8rem;
+    }
+}
+
+@media (min-width: 1200px) and (min-height: 760px) {
+    .reception-couple {
+        bottom: -3%;
+        height: min(66vh, 560px);
+    }
+
+    .reception-couple::before {
+        bottom: 0;
+    }
+
+    .reception-couple::after {
+        bottom: -2%;
+        width: 98%;
+    }
+}
+
+@media (max-width: 560px) {
+    body {
+        min-height: 560vh;
+    }
+
+    .cloud-left {
+        width: 46vw;
+    }
+
+    .cloud-right {
+        width: 42vw;
+    }
+
+    .character {
+        width: 180px;
+    }
+
+    .return-union {
+        width: min(46vw, 220px);
+        height: min(40vh, 280px);
+    }
+
+    .character-card {
+        height: 260px;
+    }
+
+    .groom {
+        top: 50%;
+    }
+
+    .bride {
+        top: 50%;
+    }
+
+    .ceremony-scene {
+        width: min(92vw, 560px);
+        height: min(68vh, 560px);
+    }
+
+    .wedding-text {
+        width: min(80%, 292px);
+        bottom: 4%;
+        padding: 0.72rem 0.78rem;
+        border-radius: 16px;
+    }
+
+    .wedding-text h2 {
+        font-size: clamp(1rem, 5vw, 1.28rem);
+    }
+
+    .wedding-text p {
+        font-size: 0.88rem;
+        line-height: 1.28;
+    }
+
+    .journey-line {
+        left: 8%;
+        right: 8%;
+    }
+
+    .scroll-prompt {
+        width: calc(100% - 2rem);
+        text-align: center;
+        font-size: 0.74rem;
+    }
+}
