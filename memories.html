@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1210">
+    <title>Guest Memories | Ashith & Sujishna</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="memories.css">
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Face API JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+
+<body class="memories-page afterglow-page">
+    <header class="memories-header">
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+        <div class="memories-brand">
+            <div class="site-crest site-crest--header" aria-hidden="true">
+                <span class="site-crest__line"></span>
+                <span class="site-crest__medallion">
+                    <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                </span>
+                <span class="site-crest__line"></span>
+            </div>
+            <p class="memories-eyebrow">Afterglow Archive</p>
+            <h1>Guest Memories</h1>
+            <p class="memories-subtitle">A living gallery of the frames, laughter, and little glances our guests catch.</p>
+        </div>
+        <div class="header-actions">
+            <button id="find-me-btn" class="outline-btn">
+                <i class="fas fa-search"></i> <span class="btn-label">Find My Photos</span>
+            </button>
+            <button id="upload-btn" class="primary-btn">
+                <i class="fas fa-camera"></i> <span class="btn-label">Upload</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="memories-intro fade-in">
+            <div class="memories-intro-card">
+                <div class="site-crest site-crest--memory" aria-hidden="true">
+                    <span class="site-crest__line"></span>
+                    <span class="site-crest__medallion">
+                        <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                    </span>
+                    <span class="site-crest__line"></span>
+                </div>
+                <p class="memories-intro-kicker">Night of Celebration</p>
+                <h2>Keep the afterglow alive.</h2>
+                <p>Upload the moments you captured, or let the gallery gather every frame you appear in.</p>
+                <div class="memories-intro-notes">
+                    <span>Upload multiple photos in one go</span>
+                    <span>Find your photos with a selfie</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search/Filter Status -->
+        <div id="filter-status" class="filter-status hidden">
+            <span>Showing photos of you</span>
+            <button id="clear-filter" class="text-btn">Clear</button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div id="memories-grid" class="gallery-grid">
+            <!-- Photos will be injected here -->
+            <div class="gallery-state gallery-state--loading">
+                <div class="site-crest site-crest--memory" aria-hidden="true">
+                    <span class="site-crest__line"></span>
+                    <span class="site-crest__medallion">
+                        <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                    </span>
+                    <span class="site-crest__line"></span>
+                </div>
+                <div class="spinner"></div>
+                <p class="gallery-state__eyebrow">Curating the evening</p>
+                <p class="gallery-state__copy">Loading memories...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="site-crest site-crest--modal" aria-hidden="true">
+                <span class="site-crest__line"></span>
+                <span class="site-crest__medallion">
+                    <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                </span>
+                <span class="site-crest__line"></span>
+            </div>
+            <p class="modal-kicker">Evening Archive</p>
+            <h3>Share a Memory</h3>
+            <p>Help us capture the magic of today.</p>
+
+            <div id="drop-zone" class="drop-zone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Tap to select or drag & drop (multiple)</p>
+                <input type="file" id="file-input" accept="image/*" multiple hidden>
+            </div>
+
+            <div id="preview-container" class="preview-container hidden">
+                <div id="preview-grid" class="preview-grid"></div>
+                <div class="upload-controls">
+                    <button id="cancel-upload" class="outline-btn">Cancel</button>
+                    <button id="confirm-upload" class="primary-btn">Upload All</button>
+                </div>
+            </div>
+
+            <div id="upload-progress" class="upload-progress hidden">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p>Optimizing and uploading...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Face Search Modal -->
+    <div id="face-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="face-search-header">
+                <div class="site-crest site-crest--modal" aria-hidden="true">
+                    <span class="site-crest__line"></span>
+                    <span class="site-crest__medallion">
+                        <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                    </span>
+                    <span class="site-crest__line"></span>
+                </div>
+                <p class="modal-kicker">Portrait Match</p>
+                <i class="fas fa-user-secret"></i>
+                <h3>Find Your Photos</h3>
+                <p>Take a selfie or upload a photo of yourself, and we'll find all the memories you're in!</p>
+            </div>
+
+            <div id="face-drop-zone" class="drop-zone">
+                <i class="fas fa-camera"></i>
+                <p>Capture or Select Photo</p>
+                <input type="file" id="face-input" accept="image/*" capture="user" hidden>
+            </div>
+
+            <div id="face-processing" class="face-processing hidden">
+                <div class="pulse-ring"></div>
+                <p>Scanning gallery for your face...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Full Screen Memory">
+            <div class="lightbox-nav">
+                <button class="lightbox-prev" aria-label="Previous photo"><i class="fas fa-chevron-left"></i></button>
+                <button class="lightbox-next" aria-label="Next photo"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <button id="lightbox-download" class="lightbox-download" aria-label="Download photo" title="Download Photo">
+                <i class="fas fa-download"></i>
+            </button>
+            <div class="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- GitHub Pages: Injected secrets (gitignored) - loaded first -->
+    <script src="_supabase-secrets.js"></script>
+    <!-- Local development fallback (copy config.example.js to config.js) -->
+    <script src="config.js"></script>
+    <script src="memories.js"></script>
+</body>
+
+</html>

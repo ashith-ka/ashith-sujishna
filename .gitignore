@@ -1,0 +1,21 @@
+
+
+# GitHub Actions generated secrets
+_supabase-secrets.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node modules (if any)
+node_modules/
+
+# Local env files
+.env
+.env.local
+AGENTS.md
