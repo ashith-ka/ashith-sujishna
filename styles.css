@@ -2214,7 +2214,32 @@ body.malayalam .copyright {
 .event-links {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .event-card .outline-btn {
+        padding: 8px 10px;
+        font-size: 0.68rem;
+        white-space: nowrap;
+    }
+    
+    .event-card .outline-btn i {
+        font-size: 0.6rem;
+    }
+}
+
+@media (min-width: 1025px) {
+    .event-card .outline-btn {
+        padding: 8px 16px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+    
+    .event-card .outline-btn i {
+        font-size: 0.7rem;
+    }
 }
 
 .event-card .outline-btn {
@@ -2731,6 +2756,121 @@ a,
 #qr-label {
     font-weight: 500;
     color: var(--primary-color);
+}
+
+/* --- Transport Modal Styles --- */
+.modal-content--transport {
+    width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.transport-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.transport-header i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.transport-header .modal-kicker {
+    color: var(--primary-color);
+}
+
+#transport-venue-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-top: 5px;
+}
+
+.transport-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.transport-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.transport-card:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(138, 108, 66, 0.03);
+}
+
+.transport-card-icon {
+    flex-shrink: 0;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2c3e50;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 1.2rem;
+}
+
+.transport-card:nth-child(1) .transport-card-icon {
+    background-color: #3498db;
+}
+
+.transport-card:nth-child(2) .transport-card-icon {
+    background-color: #27ae60;
+}
+
+.transport-card:nth-child(3) .transport-card-icon {
+    background-color: #9b59b6;
+}
+
+.transport-card-content {
+    flex: 1;
+}
+
+.transport-card-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-family: var(--font-heading);
+}
+
+.transport-card:nth-child(1) .transport-card-content h4 {
+    color: #3498db;
+}
+
+.transport-card:nth-child(2) .transport-card-content h4 {
+    color: #27ae60;
+}
+
+.transport-card:nth-child(3) .transport-card-content h4 {
+    color: #9b59b6;
+}
+
+.transport-route {
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.transport-duration {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.transport-duration i {
+    margin-right: 5px;
 }
 
 /* --- Lightbox Styles --- */
