@@ -9,6 +9,7 @@ const ceremonyScene = document.getElementById("ceremony-scene");
 const receptionScene = document.getElementById("reception-scene");
 const sceneTitle = document.querySelector(".scene-title");
 const welcomeLine = document.getElementById("welcome-line");
+const weddingDateLine = document.getElementById("wedding-date-line");
 const journeyLine = document.querySelector(".journey-line");
 const scrollPrompt = document.querySelector(".scroll-prompt");
 const ceremonyBackdrop = document.querySelector(".ceremony-backdrop");
@@ -221,8 +222,12 @@ function renderScene(timeMs = 0) {
     const returnUnionAppear = hasReachedJourneyStage && scrollDirection < 0
         ? mapRange(progress, 0.14, 0.03)
         : 0;
-    const conePull = pageTwoTravel * 28;
-    const spreadScale = 1 + (pageTwoTravel * 0.06);
+    
+    // Responsive conePull - use smaller values on mobile but keep the cone motion visible
+    const isMobile = window.innerWidth <= 768;
+    const isPhone = window.innerWidth <= 560;
+    const conePull = pageTwoTravel * (isPhone ? 6 : (isMobile ? 10 : 28));
+    const spreadScale = 1 + (pageTwoTravel * (isPhone ? 0.04 : (isMobile ? 0.05 : 0.06)));
 
     groom.style.transform = `
         translate3d(${conePull}vw, ${coneDrop}px, 0)
@@ -262,6 +267,17 @@ function renderScene(timeMs = 0) {
                 return;
             }
             letter.style.animationDelay = `${0.05 * index}s`;
+        });
+    }
+
+    if (weddingDateLine) {
+        weddingDateLine.classList.toggle("is-visible", returnUnionAppear > 0.26);
+        Array.from(weddingDateLine.querySelectorAll("span")).forEach((letter, index) => {
+            if (letter.classList.contains("date-gap")) {
+                letter.style.animationDelay = "0s";
+                return;
+            }
+            letter.style.animationDelay = `${0.08 + (0.05 * index)}s`;
         });
     }
 
@@ -322,4 +338,9 @@ window.addEventListener("resize", () => {
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     latestProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
     previousProgress = latestProgress;
+    
+    // Force re-render to update responsive values
+    if (animationStarted) {
+        window.requestAnimationFrame(renderScene);
+    }
 });

@@ -377,6 +377,46 @@ body {
     animation: none;
 }
 
+.wedding-date-line {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 0.08em;
+    margin-top: 0.8rem;
+    min-height: 1.5rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 220ms ease, transform 220ms ease;
+    pointer-events: none;
+}
+
+.wedding-date-line span {
+    display: inline-block;
+    font-family: "Cinzel", serif;
+    font-size: clamp(1.1rem, 2.3vw, 1.55rem);
+    font-weight: 700;
+    color: #b97a1f;
+    text-shadow: 0 4px 12px rgba(255, 218, 156, 0.2);
+    opacity: 0;
+    transform: translateY(12px) scale(0.92);
+}
+
+.wedding-date-line.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.wedding-date-line.is-visible span {
+    animation: welcomeBounce 0.48s ease forwards;
+}
+
+.wedding-date-line .date-gap {
+    width: 0.4em;
+    opacity: 1;
+    transform: none;
+    animation: none;
+}
+
 .journey-line {
     display: none;
 }
@@ -432,6 +472,16 @@ body {
     height: 100%;
     object-fit: contain;
     filter: brightness(1.02) contrast(1.05) saturate(1.02) drop-shadow(0 16px 24px rgba(30, 58, 90, 0.12));
+}
+
+.return-union-text {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    z-index: 16;
 }
 
 .character::before {
@@ -1103,9 +1153,14 @@ body {
         width: 210px;
     }
 
+    .wedding-date-line {
+        display: flex;
+    }
+
     .return-union {
-        width: min(34vw, 250px);
-        height: min(44vh, 340px);
+        width: min(65vw, 380px);
+        height: min(64vh, 440px);
+        bottom: -4%;
     }
 
     .character-card {
@@ -1113,23 +1168,24 @@ body {
     }
 
     .groom {
-        left: -2%;
+        left: 16%;
         top: 46%;
     }
 
     .bride {
-        right: -2%;
+        right: 16%;
         top: 46%;
     }
 
     .ceremony-scene {
-        width: min(86vw, 620px);
-        height: min(70vh, 620px);
+        width: min(88vw, 590px);
+        height: min(62vh, 590px);
+        bottom: 10%;
     }
 
     .ceremony-backdrop::before,
     .ceremony-backdrop::after {
-        width: 34vw;
+        width: 12vw;
     }
 
     .union-couple {
@@ -1150,13 +1206,23 @@ body {
         max-width: 180px;
     }
 
+    .reception-scene {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+    }
+
     .reception-backdrop {
         inset: 0;
     }
 
     .reception-couple {
-        width: min(42vw, 300px);
-        height: min(48vh, 380px);
+        width: min(56vw, 380px);
+        height: min(58vh, 440px);
+        bottom: 4%;
     }
 
     .reception-hangings {
@@ -1200,29 +1266,42 @@ body {
     }
 
     .character {
-        width: 180px;
+        width: 140px;
+    }
+
+    .wedding-date-line {
+        display: flex;
+    }
+
+    .ceremony-backdrop::before,
+    .ceremony-backdrop::after {
+        width: 8vw;
     }
 
     .return-union {
-        width: min(46vw, 220px);
-        height: min(40vh, 280px);
+        width: min(80vw, 380px);
+        height: min(66vh, 450px);
+        bottom: -4%;
     }
 
     .character-card {
-        height: 260px;
+        height: 240px;
     }
 
     .groom {
-        top: 50%;
+        left: 15%;
+        top: 48%;
     }
 
     .bride {
-        top: 50%;
+        right: 15%;
+        top: 48%;
     }
 
     .ceremony-scene {
-        width: min(92vw, 560px);
-        height: min(68vh, 560px);
+        width: min(96vw, 560px);
+        height: min(70vh, 560px);
+        bottom: 12%;
     }
 
     .wedding-text {
@@ -1239,6 +1318,27 @@ body {
     .wedding-text p {
         font-size: 0.88rem;
         line-height: 1.28;
+    }
+
+    .reception-scene {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .reception-couple {
+        width: min(75vw, 400px);
+        height: min(68vh, 480px);
+        bottom: 6%;
+    }
+
+    .reception-hangings {
+        left: 4%;
+        top: 8%;
+        width: min(64vw, 280px);
     }
 
     .journey-line {
