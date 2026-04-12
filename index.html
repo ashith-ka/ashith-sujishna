@@ -3,29 +3,57 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <!-- Mobile browser chrome colour -->
-    <meta name="theme-color" content="#1a1210">
-    <!-- iOS homescreen feel -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8a6c42">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Ashith & Sujishna | Wedding Invitation</title>
-    <meta name="description" content="Join us in celebrating the wedding of Ashith and Sujishna on May 3rd, 2026.">
-    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Title (improved) -->
+    <title>Ashith ❤️ Sujishna | Wedding Invitation</title>
+
+    <!-- SEO -->
+    <meta name="description"
+        content="Together with love, we invite you to celebrate our wedding. Tap to view the invitation.">
+
+    <!-- Open Graph (WhatsApp / Facebook / LinkedIn) -->
+    <meta property="og:title" content="Ashith ❤️ Sujishna | Wedding Invitation">
+    <meta property="og:description" content="Together with love, we invite you to celebrate our special day.">
+    <meta property="og:image" content="https://ashith-ka.github.io/ashith-sujishna/preview.png">
+    <meta property="og:url" content="https://ashith-ka.github.io/ashith-sujishna/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Ashith & Sujishna Wedding">
+
+    <!-- Twitter (used by some apps as fallback) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ashith ❤️ Sujishna | Wedding Invitation">
+    <meta name="twitter:description" content="Together with love, we invite you to celebrate our special day.">
+    <meta name="twitter:image" content="https://ashith-ka.github.io/ashith-sujishna/preview.png">
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.ico">
     <link rel="apple-touch-icon" href="assets/favicon.png">
 
-    <!-- Google Fonts -->
+    <!-- Preload critical fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;600;700&display=swap"
+        as="style">
     <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Manrope:wght@400;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Font Awesome for Icons -->
+    <!-- Preload hero video -->
+    <link rel="preload" as="video" href="assets/hero-video.webm" type="video/webm" fetchpriority="high">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="styles.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="./styles.css">
 </head>
+
 
 <body class="cinematic-page">
 
@@ -53,7 +81,7 @@
                         <div class="site-crest site-crest--cover" aria-hidden="true">
                             <span class="site-crest__line"></span>
                             <span class="site-crest__medallion">
-                                <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                                <img src="assets/favicon.ico" alt="Wedding Logo" class="site-crest__monogram">
                             </span>
                             <span class="site-crest__line"></span>
                         </div>
@@ -106,7 +134,7 @@
             <h1 class="names">Ashith <span>&</span> Sujishna</h1>
             <div class="hero-date-wrapper">
                 <span class="hero-ornament left">&#10022;</span>
-                <p class="date">May 3rd, 2026</p>
+                <p class="date">Sunday, 3 May 2026</p>
                 <span class="hero-ornament right">&#10022;</span>
             </div>
 
@@ -148,12 +176,13 @@
     <!-- Invitation Note Section -->
     <section class="invitation-note">
         <div class="container fade-in">
-            <p class="invitation-kicker">A Love Story in Motion</p>
+            <p class="invitation-kicker">With joy in our hearts</p>
             <p class="invitation-text">
-                As the music swells and the light turns golden, we step into the most beautiful chapter of our story.
+                We warmly invite you to celebrate our wedding and share in this beautiful day
+                with us.
             </p>
             <p class="invitation-text">
-                Join us for a day of vows, celebration, and the warmth of the people who mean the most to us.
+                Join us for a celebration filled with love, vows, and the presence of those dearest to us.
             </p>
             <p class="invitation-text">
                 Your presence will turn these moments into memories we will carry forever.
@@ -187,7 +216,7 @@
                     <h3>The Wedding</h3>
                     <p class="event-microcopy">Morning vows and quiet blessings</p>
                     <div class="event-ornament">&#10022; &#10022; &#10022;</div>
-                    <div class="event-date-chip"><i class="far fa-calendar"></i> May 3rd, 2026</div>
+                    <div class="event-date-chip"><i class="far fa-calendar"></i>Sunday, 3 May 2026</div>
                     <div class="event-details">
                         <div class="event-detail-row">
                             <span class="detail-icon"><i class="fas fa-clock"></i></span>
@@ -211,6 +240,7 @@
                             data-url="https://www.google.com/maps/place/SHA+International+Auditorium/@10.5287785,76.0451022,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba792fc591a2951:0xbc0e9677a5df3ffe!8m2!3d10.5287785!4d76.0476771!16s%2Fg%2F1tltkt5x?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D"
                             data-label="Wedding: SHA International Auditorium"><i class="fas fa-qrcode"></i> Scan
                             QR</button>
+                        <button class="outline-btn transport-btn" data-venue="Wedding"><i class="fas fa-bus"></i> Transport</button>
                     </div>
                 </div>
 
@@ -233,7 +263,7 @@
                     <h3>The Reception</h3>
                     <p class="event-microcopy">An evening of laughter, music, and celebration</p>
                     <div class="event-ornament">&#10022; &#10022; &#10022;</div>
-                    <div class="event-date-chip"><i class="far fa-calendar"></i> May 3rd, 2026</div>
+                    <div class="event-date-chip"><i class="far fa-calendar"></i> Sunday, 3 May 2026</div>
                     <div class="event-details">
                         <div class="event-detail-row">
                             <span class="detail-icon"><i class="fas fa-clock"></i></span>
@@ -257,6 +287,7 @@
                             data-url="https://www.google.com/maps/place/Jubilee+Convention+Centre/@10.3709871,76.1562208,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba7f4370947bf1b:0x96e3c5892b5e4006!8m2!3d10.3709871!4d76.1587957!16s%2Fg%2F1td70fkm?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D"
                             data-label="Reception: Jubilee Convention Centre"><i class="fas fa-qrcode"></i> Scan
                             QR</button>
+                        <button class="outline-btn transport-btn" data-venue="Reception"><i class="fas fa-bus"></i> Transport</button>
                     </div>
                 </div>
             </div>
@@ -266,60 +297,47 @@
     <!-- Gallery Section -->
     <section class="gallery" id="gallery">
         <div class="container fade-in">
-            <p class="gallery-kicker">Selected Frames</p>
-            <h2 class="section-title">Moments From Our Story</h2>
+            <p class="gallery-kicker">Our Moments</p>
+            <h2 class="section-title">Memories We Cherish</h2>
             <div class="divider"></div>
-            <p class="gallery-sub">A few stills from the journey that led us here.</p>
+            <p class="gallery-sub">A few moments from our journey together.</p>
 
             <div class="gallery-grid">
-                <!-- Placeholder image URLs from Unsplash (wedding theme) -->
                 <div class="gallery-item gallery-item--featured">
                     <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=900"
-                        alt="Wedding Photo 1" loading="lazy">
-                    <div class="gallery-frame-copy">
-                        <span class="gallery-frame-tag">Lead Frame</span>
-                        <p class="gallery-frame-title">The First Light of Our Day</p>
-                    </div>
+                        srcset="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=400 400w, https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600 600w, https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=900 900w"
+                        sizes="(max-width: 480px) 100vw, (max-width: 768px) 100vw, 900px" alt="Wedding Photo"
+                        loading="lazy">
                 </div>
                 <div class="gallery-item">
                     <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 2" loading="lazy">
-                    <div class="gallery-frame-copy">
-                        <span class="gallery-frame-tag">Portrait</span>
-                        <p class="gallery-frame-title">Quiet joy before the vows</p>
-                    </div>
+                        srcset="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=300 300w, https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=600 600w"
+                        sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" alt="Wedding Photo"
+                        loading="lazy">
                 </div>
                 <div class="gallery-item">
                     <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 3" loading="lazy">
-                    <div class="gallery-frame-copy">
-                        <span class="gallery-frame-tag">Ceremony</span>
-                        <p class="gallery-frame-title">Moments caught in golden air</p>
-                    </div>
+                        srcset="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=300 300w, https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=600 600w"
+                        sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" alt="Wedding Photo"
+                        loading="lazy">
                 </div>
                 <div class="gallery-item">
                     <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 4" loading="lazy">
-                    <div class="gallery-frame-copy">
-                        <span class="gallery-frame-tag">Evening</span>
-                        <p class="gallery-frame-title">A celebration gathering its glow</p>
-                    </div>
+                        srcset="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=300 300w, https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=600 600w"
+                        sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" alt="Wedding Photo"
+                        loading="lazy">
                 </div>
                 <div class="gallery-item mobile-hidden">
                     <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 5" loading="lazy">
-                    <div class="gallery-frame-copy">
-                        <span class="gallery-frame-tag">Details</span>
-                        <p class="gallery-frame-title">Little textures of the day</p>
-                    </div>
+                        srcset="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=300 300w, https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=600 600w"
+                        sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" alt="Wedding Photo"
+                        loading="lazy">
                 </div>
                 <div class="gallery-item mobile-hidden">
                     <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=600"
-                        alt="Wedding Photo 6" loading="lazy">
-                    <div class="gallery-frame-copy">
-                        <span class="gallery-frame-tag">Afterglow</span>
-                        <p class="gallery-frame-title">The warmth that lingers after</p>
-                    </div>
+                        srcset="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=300 300w, https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=600 600w"
+                        sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw" alt="Wedding Photo"
+                        loading="lazy">
                 </div>
             </div>
 
@@ -336,12 +354,12 @@
             <div class="site-crest site-crest--footer" aria-hidden="true">
                 <span class="site-crest__line"></span>
                 <span class="site-crest__medallion">
-                    <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                    <img src="assets/favicon.ico" alt="Wedding Logo" class="site-crest__monogram">
                 </span>
                 <span class="site-crest__line"></span>
             </div>
             <h2 class="footer-names">Ashith & Sujishna</h2>
-            <p>Be with us as this new chapter begins.</p>
+            <p>We look forward to celebrating with you.</p>
             <p class="copyright">&copy; 2026 Ashith & Sujishna<br> Made with love</p>
         </div>
     </footer>
@@ -354,17 +372,55 @@
                 <div class="site-crest site-crest--modal" aria-hidden="true">
                     <span class="site-crest__line"></span>
                     <span class="site-crest__medallion">
-                        <span class="site-crest__monogram">A <span>&amp;</span> S</span>
+                        <img src="assets/favicon.ico" alt="Wedding Logo" class="site-crest__monogram">
                     </span>
                     <span class="site-crest__line"></span>
                 </div>
-                <p class="modal-kicker">Travel Companion</p>
                 <i class="fas fa-mobile-alt"></i>
-                <h3>Scan for Directions</h3>
-                <p>Heading out? Scan this on your phone to open navigation.</p>
+                <p class="modal-kicker">Scan for Directions</p>
+                <p>Scan this code for directions to the venue.</p>
             </div>
             <div id="qr-container"></div>
             <p id="qr-label"></p>
+        </div>
+    </div>
+
+    <!-- Transport Modal -->
+    <div id="transport-modal" class="modal">
+        <div class="modal-content modal-content--transport">
+            <span class="close-btn transport-close">&times;</span>
+            <div class="transport-header">
+                <i class="fas fa-bus"></i>
+                <p class="modal-kicker">How to Reach</p>
+                <p id="transport-venue-name">The Venue</p>
+            </div>
+            
+            <div class="transport-cards">
+                <div class="transport-card">
+                    <div class="transport-card-icon"><i class="fas fa-bus"></i></div>
+                    <div class="transport-card-content">
+                        <h4>By Bus</h4>
+                        <p class="transport-route">From Thrissur KSRTC Stand → Take bus to Chettuva → Auto/Taxi to venue</p>
+                        <p class="transport-duration"><i class="fas fa-clock"></i> ~45 mins</p>
+                    </div>
+                </div>
+                <div class="transport-card">
+                    <div class="transport-card-icon"><i class="fas fa-train"></i></div>
+                    <div class="transport-card-content">
+                        <h4>By Train</h4>
+                        <p class="transport-route">Thrissur Railway Station (20km) → Take auto/taxi to venue</p>
+                        <p class="transport-duration"><i class="fas fa-clock"></i> ~30 mins</p>
+                    </div>
+                </div>
+                <div class="transport-card">
+                    <div class="transport-card-icon"><i class="fas fa-plane"></i></div>
+                    <div class="transport-card-content">
+                        <h4>By Flight</h4>
+                        <p class="transport-route">Cochin International Airport (55km) → Taxi to venue (~1hr)</p>
+                        <p class="transport-duration"><i class="fas fa-clock"></i> ~1.5 hrs</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -384,6 +440,15 @@
     <!-- QR Code Library — Only needed for desktop scanning -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered:', reg.scope))
+                    .catch(err => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
 </body>
 
 </html>

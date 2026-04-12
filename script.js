@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         shareText: 'Join us in celebrating the wedding of Ashith and Sujishna on May 3rd, 2026.',
         copiedText: 'Copied!'
     };
-    
+
     if (cover) {
         let isCoverOpening = false;
 
@@ -354,6 +354,67 @@ document.addEventListener('DOMContentLoaded', () => {
             qrModal.classList.remove('show');
         });
     }
+
+    qrModal.addEventListener('click', (e) => {
+        if (e.target === qrModal) {
+            qrModal.classList.remove('show');
+        }
+    });
+
+    // --- 8b. Transport Modal Logic ---
+    const transportModal = document.getElementById('transport-modal');
+    const transportBtns = document.querySelectorAll('.transport-btn');
+    const transportClose = document.querySelector('.transport-close');
+    const transportVenueName = document.getElementById('transport-venue-name');
+    let currentVenue = 'Wedding';
+
+    const venueRoutes = {
+        Wedding: {
+            bus: 'From Thrissur KSRTC Stand → Take bus to Chettuva → Auto/Taxi to venue',
+            train: 'Thrissur Railway Station (20km) → Take auto/taxi to venue',
+            airport: 'Cochin International Airport (55km) → Taxi to venue (~1hr)'
+        },
+        Reception: {
+            bus: 'From Thrissur Shakthan Stand → Take bus to Kattoor → Walk to venue',
+            train: 'Irinjalakuda Railway Station (12km) → Taxi to venue',
+            airport: 'Cochin International Airport (60km) → Taxi to venue (~1.5hr)'
+        }
+    };
+
+    transportBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentVenue = btn.getAttribute('data-venue') || 'Wedding';
+            transportVenueName.innerText = currentVenue === 'Reception' ?
+                'Jubilee Convention Centre' : 'SHA International Auditorium';
+            updateTransportRoutes();
+            transportModal.classList.add('show');
+        });
+    });
+
+    function updateTransportRoutes() {
+        const cards = document.querySelectorAll('.transport-card');
+        const routes = venueRoutes[currentVenue] || venueRoutes.Wedding;
+        cards.forEach((card, index) => {
+            const routeEl = card.querySelector('.transport-route');
+            const types = ['bus', 'train', 'airport'];
+            if (routeEl && routes[types[index]]) {
+                routeEl.innerText = routes[types[index]];
+            }
+        });
+    }
+
+    if (transportClose && transportModal) {
+        transportClose.addEventListener('click', () => {
+            transportModal.classList.remove('show');
+        });
+    }
+
+    transportModal.addEventListener('click', (e) => {
+        if (e.target === transportModal) {
+            transportModal.classList.remove('show');
+        }
+    });
 
     // --- 9. Full-Screen Photo Lightbox Logic ---
     const lightbox = document.getElementById('lightbox');

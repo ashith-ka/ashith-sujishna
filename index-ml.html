@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#1a1210">
+    <meta name="theme-color" content="#8a6c42">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>അഷിത്ത് & സുജിഷ്‌ണ | പരിണയപത്രം</title>
     <meta name="description" content="2026 മെയ് 3ന് അഷിത്തിന്റെയും സുജിഷ്‌ണയുടെയും വിവാഹത്തിന് ഞങ്ങളോടൊപ്പം ചേരൂ.">
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="apple-touch-icon" href="assets/favicon.png">
+    <link rel="manifest" href="manifest.json">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -203,6 +204,7 @@
                             data-label="വിവാഹച്ചടങ്ങ്: ഷാ ഇന്റർനാഷണൽ ഓഡിറ്റോറിയം, ചേറ്റുവ"><i class="fas fa-qrcode"></i>
                             QR
                             സ്കാൻ</button>
+                        <button class="outline-btn transport-btn" data-venue="Wedding"><i class="fas fa-bus"></i> ഗതാഗതം</button>
                     </div>
                 </div>
 
@@ -249,6 +251,7 @@
                             data-url="https://www.google.com/maps/place/Jubilee+Convention+Centre/@10.3709871,76.1562208,17z/data=!3m1!4b1!4m6!3m5!1s0x3ba7f4370947bf1b:0x96e3c5892b5e4006!8m2!3d10.3709871!4d76.1587957!16s%2Fg%2F1td70fkm?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D"
                             data-label="സ്‌നേഹവിരുന്ന്: ജൂബിലി കൺവെൻഷൻ സെൻ്റർ, കാട്ടൂർ"><i class="fas fa-qrcode"></i> QR
                             സ്കാൻ</button>
+                        <button class="outline-btn transport-btn" data-venue="Reception"><i class="fas fa-bus"></i> ഗതാഗതം</button>
                     </div>
                 </div>
             </div>
@@ -293,6 +296,45 @@
         </div>
     </div>
 
+    <!-- Transport Modal -->
+    <div id="transport-modal" class="modal">
+        <div class="modal-content modal-content--transport">
+            <span class="close-btn transport-close">&times;</span>
+            <div class="transport-header">
+                <i class="fas fa-bus"></i>
+                <p class="modal-kicker">എത്തിച്ചേരാനുള്ള വഴി</p>
+                <p id="transport-venue-name">വേദി</p>
+            </div>
+            
+            <div class="transport-cards">
+                <div class="transport-card">
+                    <div class="transport-card-icon"><i class="fas fa-bus"></i></div>
+                    <div class="transport-card-content">
+                        <h4>ബസ്മാര്ഗം</h4>
+                        <p class="transport-route">തൃശൂര് കെഎസ്ആര്‍ടിസിയില്‍ നിന്ന് ചേറ്റുവയിലേക്ക് ബസ്</p>
+                        <p class="transport-duration"><i class="fas fa-clock"></i> 45 മിനിട്ട്</p>
+                    </div>
+                </div>
+                <div class="transport-card">
+                    <div class="transport-card-icon"><i class="fas fa-train"></i></div>
+                    <div class="transport-card-content">
+                        <h4>ട്രയിനിലായി</h4>
+                        <p class="transport-route">തൃശൂര് റെയിലേവേ സ്റ്റാഷന്‍ (20കിമി)</p>
+                        <p class="transport-duration"><i class="fas fa-clock"></i> 30 മിനിട്ട്</p>
+                    </div>
+                </div>
+                <div class="transport-card">
+                    <div class="transport-card-icon"><i class="fas fa-plane"></i></div>
+                    <div class="transport-card-content">
+                        <h4>വിമാനത്തിലായി</h4>
+                        <p class="transport-route">കൊച്ചി വിമാനത്താവലയം (55കിമി)</p>
+                        <p class="transport-duration"><i class="fas fa-clock"></i> 1.5 മണിക്കാല്‍</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Lightbox Modal -->
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close">&times;</span>
@@ -308,6 +350,15 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered:', reg.scope))
+                    .catch(err => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
 </body>
 
 </html>

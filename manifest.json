@@ -1,0 +1,29 @@
+{
+    "name": "Ashith & Sujishna Wedding",
+    "short_name": "A & S Wedding",
+    "description": "Join us to celebrate our wedding on May 3rd, 2026",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1a1210",
+    "theme_color": "#8a6c42",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "icons": [
+        {
+            "src": "assets/favicon.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "assets/favicon-1.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["lifestyle", "entertainment"],
+    "lang": "en",
+    "dir": "ltr",
+    "prefer_related_applications": false
+}
