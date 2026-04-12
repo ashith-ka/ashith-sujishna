@@ -910,6 +910,8 @@ section {
 .lang-toggle i {
     font-size: 18px;
     line-height: 1;
+    display: block;
+    vertical-align: middle;
 }
 
 @keyframes pulse {
@@ -2257,7 +2259,7 @@ body.malayalam .copyright {
         font-size: 0.68rem;
         white-space: nowrap;
     }
-    
+
     .event-card .outline-btn i {
         font-size: 0.6rem;
     }
@@ -2269,7 +2271,7 @@ body.malayalam .copyright {
         font-size: 0.75rem;
         white-space: nowrap;
     }
-    
+
     .event-card .outline-btn i {
         font-size: 0.7rem;
     }
