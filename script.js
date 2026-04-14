@@ -370,13 +370,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const venueRoutes = {
         Wedding: {
-            bus: 'From Thrissur KSRTC Stand → Take bus to Chettuva → Auto/Taxi to venue',
-            train: 'Thrissur Railway Station (20km) → Take auto/taxi to venue',
-            airport: 'Cochin International Airport (55km) → Taxi to venue (~1hr)'
+            bus: 'From Ernakulam → Take bus to Guruvayur via Thriprayar',
+            train: 'Thrissur Railway Station (25km) / Guruvayur Railway Station (10km)',
+            airport: 'Cochin International Airport (70km) → Taxi to venue (~2hrs)'
         },
         Reception: {
-            bus: 'From Thrissur Shakthan Stand → Take bus to Kattoor → Walk to venue',
-            train: 'Irinjalakuda Railway Station (12km) → Taxi to venue',
+            bus: 'From (Thrissur Shakthan Stand / Irinjalakuda / Thriprayar) → Take bus to Kattoor → Walk to venue',
+            train: 'Thrissur Railway Station (25km) / Irinjalakuda Railway Station (12km) → Taxi to venue',
             airport: 'Cochin International Airport (60km) → Taxi to venue (~1.5hr)'
         }
     };
