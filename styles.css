@@ -577,8 +577,10 @@
 }
 
 .cover-tap {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
     color: var(--primary-color);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     animation: pulse-opacity 2s ease-in-out infinite;
     position: absolute;
     bottom: 24px;
