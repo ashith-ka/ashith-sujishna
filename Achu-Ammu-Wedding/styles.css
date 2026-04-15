@@ -773,7 +773,7 @@ body {
     position: absolute;
     inset: 0;
     opacity: 0;
-    z-index: 17;
+    z-index: 40;
     pointer-events: none;
     background:
         radial-gradient(circle at 50% 12%, rgba(255, 210, 144, calc(0.16 + (var(--reception-progress) * 0.14))) 0%, rgba(255, 210, 144, 0) 24%),

@@ -16,6 +16,7 @@ const ceremonyBackdrop = document.querySelector(".ceremony-backdrop");
 const backgroundLayers = Array.from(document.querySelectorAll(".bg-layer"));
 const cloudLayers = Array.from(document.querySelectorAll(".cloud"));
 let latestProgress = 0;
+let currentProgress = 0;
 let animationStarted = false;
 let receptionLightTimer = null;
 let previousProgress = 0;
@@ -190,7 +191,14 @@ function updateConfetti(progress, intensity, timeMs) {
 }
 
 function renderScene(timeMs = 0) {
-    const progress = latestProgress;
+    // Interpolate for smooth scrolling
+    currentProgress += (latestProgress - currentProgress) * 0.07;
+    
+    if (Math.abs(latestProgress - currentProgress) < 0.0001) {
+        currentProgress = latestProgress;
+    }
+
+    const progress = currentProgress;
 
     root.style.setProperty("--scroll-progress", progress.toFixed(4));
 
@@ -317,6 +325,7 @@ createConfetti();
 {
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     latestProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+    currentProgress = latestProgress;
     previousProgress = latestProgress;
 }
 if (!animationStarted) {
