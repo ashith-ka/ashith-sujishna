@@ -192,40 +192,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 4. Hero Video Scroll Animation ---
-    // heroVideo already declared above in section 0
     const heroSection = document.querySelector('.hero');
+    let ticking = false;
 
-    // We only want to animate while the hero section is in view
-    window.addEventListener('scroll', () => {
+    function updateHeroScroll() {
         if (!heroVideo) return;
 
         let scrollY = window.scrollY;
-
-        // Use a fixed value or the actual height. Offset height sometimes loads 0 depending on timing, so fallback to window.innerHeight if needed.
         let heroHeight = heroSection.offsetHeight || window.innerHeight;
 
-        // Stop calculating if scrolled past hero
-        if (scrollY > heroHeight) return;
+        if (scrollY > heroHeight + 100) {
+            ticking = false;
+            return;
+        }
 
-        // Calculate a scroll progress percentage (0 to 1)
-        let progress = scrollY / heroHeight;
+        let progress = Math.min(1, Math.max(0, scrollY / heroHeight));
 
-        // Visual Effects Mapping:
-        // Scale: Starts at 1.05, shrinks down to 1.0
+        // Visual Effects Mapping
         let scaleVal = 1.05 - (0.05 * progress);
-
-        // Blur: Starts at 0px, increases to 8px
         let blurVal = progress * 8;
-
-        // Opacity: Starts at 1, fades to 0.4
         let opacityVal = 1 - (0.6 * progress);
 
-        // Apply styles dynamically
-        // Use translateZ(0) to force hardware acceleration for smoother rendering
         heroVideo.style.transform = `scale(${scaleVal}) translateZ(0)`;
         heroVideo.style.filter = `blur(${blurVal}px)`;
         heroVideo.style.opacity = opacityVal;
-    });
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(updateHeroScroll);
+            ticking = true;
+        }
+    }, { passive: true });
+
+    // --- 4a. Magnetic Buttons & Staggered Reveal Add-ons ---
+    function initMagneticButtons() {
+        const buttons = document.querySelectorAll('.primary-btn, .outline-btn');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.4}px) scale(1.02)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+            });
+        });
+    }
+
+    initMagneticButtons();
 
     // --- 5. Add to Calendar Logic ---
     const addToCalendarBtn = document.getElementById('add-to-calendar');
