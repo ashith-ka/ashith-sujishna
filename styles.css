@@ -581,11 +581,15 @@
 .cover-tap {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #4a2810; /* Darker, higher contrast brown */
-    text-shadow: 
-        0 0 12px rgba(255, 255, 255, 0.9), /* White glow for contrast */
-        0 2px 4px rgba(0, 0, 0, 0.15); /* Subtle depth */
-    background: rgba(255, 255, 255, 0.5); /* Soft pill backdrop */
+    color: #4a2810;
+    /* Darker, higher contrast brown */
+    text-shadow:
+        0 0 12px rgba(255, 255, 255, 0.9),
+        /* White glow for contrast */
+        0 2px 4px rgba(0, 0, 0, 0.15);
+    /* Subtle depth */
+    background: rgba(255, 255, 255, 0.5);
+    /* Soft pill backdrop */
     border-radius: 20px;
     padding: 6px 16px;
     margin: 0 auto;
@@ -602,14 +606,18 @@
 }
 
 @keyframes pulse-opacity {
+
     0%,
     100% {
-        opacity: 0.8; /* Increased minimum opacity */
+        opacity: 0.8;
+        /* Increased minimum opacity */
         transform: scale(0.98);
     }
+
     50% {
         opacity: 1;
-        transform: scale(1.02); /* Added slight scale for better attention */
+        transform: scale(1.02);
+        /* Added slight scale for better attention */
     }
 }
 
@@ -1605,7 +1613,9 @@ body.malayalam footer p {
 }
 
 @keyframes loaderPulse {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .video-ready .video-loader {
@@ -3384,7 +3394,6 @@ body.ceremonial-page section {
 
 .site-crest__monogram {
     width: 100%;
-    height: 100%;
     object-fit: cover;
     display: block;
 }
