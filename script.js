@@ -62,6 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const heroVideo = document.getElementById('hero-video');
                 if (heroVideo) {
                     heroVideo.play().catch(e => console.log("Video autoplay failed:", e));
+                    
+                    // Add video-ready class if already loaded
+                    if (heroVideo.readyState >= 3) {
+                        document.body.classList.add('video-ready');
+                    } else {
+                        heroVideo.addEventListener('canplay', () => {
+                            document.body.classList.add('video-ready');
+                        }, { once: true });
+                    }
                 }
             }, revealDelay);
 
@@ -120,17 +129,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicToggle = document.getElementById('music-toggle');
     const bgMusic = document.getElementById('bg-music');
     let isPlaying = false;
+    let fadeInterval = null;
 
-    // Optional: Lower volume slightly for better background ambiance
-    bgMusic.volume = 0.4;
+    // Target volume
+    const TARGET_VOLUME = 0.4;
+
+    function fadeAudio(targetVolume, duration = 1500) {
+        clearInterval(fadeInterval);
+        const steps = 30;
+        const volumeStep = (targetVolume - bgMusic.volume) / steps;
+        const stepDuration = duration / steps;
+
+        fadeInterval = setInterval(() => {
+            const nextVolume = bgMusic.volume + volumeStep;
+            
+            if ((volumeStep > 0 && nextVolume >= targetVolume) || 
+                (volumeStep < 0 && nextVolume <= targetVolume)) {
+                bgMusic.volume = targetVolume;
+                clearInterval(fadeInterval);
+                if (targetVolume === 0) bgMusic.pause();
+            } else {
+                bgMusic.volume = Math.max(0, Math.min(1, nextVolume));
+            }
+        }, stepDuration);
+    }
 
     musicToggle.addEventListener('click', () => {
         if (isPlaying) {
-            bgMusic.pause();
+            fadeAudio(0, 1000);
             musicToggle.innerHTML = '<i class="fas fa-music"></i>';
             musicToggle.classList.remove('playing');
         } else {
-            bgMusic.play().catch(e => console.log("Audio play failed due to browser policies:", e));
+            bgMusic.volume = 0;
+            bgMusic.play().catch(e => console.log("Audio play failed:", e));
+            fadeAudio(TARGET_VOLUME, 2000);
             musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
             musicToggle.classList.add('playing');
         }
@@ -252,18 +284,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const addToCalendarBtn = document.getElementById('add-to-calendar');
     if (addToCalendarBtn) {
         addToCalendarBtn.addEventListener('click', () => {
-            // Google Calendar Format
-            const title = encodeURIComponent(pageCopy.calendarTitle);
-            const details = encodeURIComponent(pageCopy.calendarDetails);
-            const location = encodeURIComponent(pageCopy.calendarLocation);
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 
-            // The calendar event spans the full wedding day itinerary in IST.
-            const startTime = "20260503T041500Z"; // 9:45 AM IST
-            const endTime = "20260503T133000Z";   // 7:00 PM IST
+            if (isIOS || isMac) {
+                // Apple Calendar (.ics) Generation
+                const icsContent = [
+                    'BEGIN:VCALENDAR',
+                    'VERSION:2.0',
+                    'BEGIN:VEVENT',
+                    'URL:' + window.location.href,
+                    'DTSTART:20260503T041500Z',
+                    'DTEND:20260503T133000Z',
+                    'SUMMARY:' + pageCopy.calendarTitle,
+                    'DESCRIPTION:' + pageCopy.calendarDetails.replace(/\n/g, '\\n'),
+                    'LOCATION:' + pageCopy.calendarLocation,
+                    'END:VEVENT',
+                    'END:VCALENDAR'
+                ].join('\n');
 
-            const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'wedding-invitation.ics');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                // Google Calendar Format
+                const title = encodeURIComponent(pageCopy.calendarTitle);
+                const details = encodeURIComponent(pageCopy.calendarDetails);
+                const location = encodeURIComponent(pageCopy.calendarLocation);
 
-            window.open(googleCalUrl, '_blank');
+                const startTime = "20260503T041500Z"; // 9:45 AM IST
+                const endTime = "20260503T133000Z";   // 7:00 PM IST
+
+                const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
+                window.open(googleCalUrl, '_blank');
+            }
         });
     }
 
