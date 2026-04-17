@@ -1129,8 +1129,21 @@ body {
     color: var(--ink);
 }
 
+.scroll-track {
+    position: relative;
+}
+
 .scroll-track section {
     height: 100vh;
+}
+
+.snap-point {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    pointer-events: none;
+    visibility: hidden;
 }
 
 @media (max-width: 980px) {
@@ -1140,8 +1153,18 @@ body {
 }
 
 @media (max-width: 768px) {
+    html {
+        scroll-snap-type: y mandatory;
+    }
+
+    /* Important: to allow HTML scroll snapping, we shouldn't restrict body height or we should let HTML handle it */
     body {
         min-height: 520vh;
+    }
+
+    .snap-point {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
     }
 
     .scene-title {
