@@ -1280,7 +1280,8 @@ body.malayalam .ml-date-number {
 }
 
 .invitation-note .container {
-    max-width: 750px;
+    max-width: 90%;
+    margin: 0 auto;
     position: relative;
     z-index: 1;
 }
@@ -1419,6 +1420,8 @@ body:not(.malayalam) .invitation-note::after {
 }
 
 body:not(.malayalam) .invitation-note .container {
+    width: 90%;
+    margin: 0 auto;
     max-width: 820px;
     padding: clamp(28px, 6vw, 56px);
     background: linear-gradient(160deg, rgba(22, 15, 18, 0.9), rgba(34, 24, 27, 0.82));
