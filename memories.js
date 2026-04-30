@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelUpload = document.getElementById('cancel-upload');
     const confirmUpload = document.getElementById('confirm-upload');
     const uploadProgress = document.getElementById('upload-progress');
+    const uploadWarning = document.getElementById('upload-warning');
     const progressFill = document.querySelector('.progress-fill');
     const memoriesGrid = document.getElementById('memories-grid');
 
@@ -160,11 +161,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- MODAL CONTROLS ---
     if (uploadBtn) {
         uploadBtn.addEventListener('click', () => {
-            if (!supabaseClient) {
-                alert('Please configure Supabase credentials in config.js first!');
-                return;
+            if (uploadModal) uploadModal.style.display = 'block';
+
+            if (!supabaseClient && uploadWarning) {
+                uploadWarning.textContent = 'Supabase is not configured yet. You can preview images, but uploads are disabled until config.js has valid Supabase credentials.';
+                uploadWarning.classList.remove('hidden');
+            } else if (uploadWarning) {
+                uploadWarning.classList.add('hidden');
             }
-            uploadModal.style.display = 'block';
+
+            if (confirmUpload) {
+                confirmUpload.disabled = !supabaseClient;
+            }
         });
     }
 
@@ -262,7 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (uploadProgress) uploadProgress.classList.add('hidden');
         if (progressFill) progressFill.style.width = '0%';
         if (previewGrid) previewGrid.innerHTML = '';
-        if (confirmUpload) confirmUpload.disabled = false;
+        if (uploadWarning) uploadWarning.classList.add('hidden');
+        if (confirmUpload) confirmUpload.disabled = !supabaseClient;
     }
 
     if (cancelUpload) {
@@ -271,7 +280,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (confirmUpload) {
         confirmUpload.addEventListener('click', async () => {
-            if (!selectedFiles.length || !supabaseClient) return;
+            if (!supabaseClient) {
+                alert('Please configure Supabase credentials in config.js before uploading photos.');
+                return;
+            }
+            if (!selectedFiles.length) return;
 
             confirmUpload.disabled = true;
             uploadProgress.classList.remove('hidden');
