@@ -169,37 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         isPlaying = !isPlaying;
     });
 
-    // --- 2. Countdown Timer Logic ---
-    // Set the date we're counting down to: May 3rd, 2026, 10:00 AM IST (India Standard Time)
-    const countDownDate = new Date("2026-05-03T10:00:00+05:30").getTime();
-
-    // Update the count down every 1 second
-    const countdownFunction = setInterval(() => {
-        // Get today's date and time
-        const now = new Date().getTime();
-
-        // Find the distance between now and the count down date
-        const distance = countDownDate - now;
-
-        // Time calculations for days, hours, minutes and seconds
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // Display the result in the corresponding elements
-        document.getElementById("days").innerText = days.toString().padStart(2, '0');
-        document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-        document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-        document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(countdownFunction);
-            document.querySelector(".countdown-container").innerHTML = `<h2 style="font-family: ${pageCopy.countdownFont}; color: var(--primary-light); font-size: 2rem">${pageCopy.countdownDone}</h2>`;
-        }
-    }, 1000);
-
     // --- 3. Scroll Animation Logic (Intersection Observer) ---
     const fadeElements = document.querySelectorAll('.fade-in');
 
